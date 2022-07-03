@@ -1,4 +1,4 @@
-package DinamicProgramming;
+package dp.knapsack;
 
 import java.io.BufferedReader;
 import java.io.IOException;
