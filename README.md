@@ -4,7 +4,8 @@
 ## [StackQueue](https:///github.com/kyj2212/Algorithm/StackQueue)
 what is Stack?  
 - FILO : Fist input Last Out
-- ex) 후위식계산
+- ex) 후위식계산  
+
 what is Queue?  
 - FIFO : Fist input, First Out
 - ex) 브라우저 뒤로가기, 앞으로 가기, prompt의 history
