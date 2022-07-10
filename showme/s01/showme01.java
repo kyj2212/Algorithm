@@ -59,7 +59,27 @@ class Main {
         System.out.println(sameSum(a,b));
     }
 
-    static int sameSum(int[] a, int[] b){
+    static int sameSum(int[] a, int[] b){ // 시간 초과
+        long aSum=0;
+        long bSum=0;            // sameSum04 보다 메모리 줄임. 배열 없앰
+        int cnt=0;
+
+        for (int i = 0; i < N; i++) { // N*N 안됨
+
+            for (int j = i; j < N; j++) {
+
+                aSum+=a[j];
+                bSum+=b[j];
+                if(aSum==bSum)
+                    cnt++;
+            }
+        }
+
+        return cnt;
+    }
+
+
+    static int sameSum__(int[] a, int[] b){ // 중도포기
         long[] aSum= new long[N*N];
         long[] bSum= new long[N*N];
         int cnt=0;
@@ -88,6 +108,106 @@ class Main {
     }
 
 
+    static int sameSum04(int[] a, int[] b){ // 시간 초과
+        int [] aSum = new int[N];
+        int [] bSum = new int[N];
+
+        int cnt=0;
+
+        for (int i = 0; i < N; i++) { // N*N 안됨
+
+            for (int j = i; j < N; j++) {
+
+                aSum[i]+=a[j];
+                bSum[i]+=b[j];
+                if(aSum[i]==bSum[i])
+                    cnt++;
+            }
+        }
+
+        return cnt;
+    }
+
+    static int sameSum03(int[] a, int[] b){ // 메모리 초과
+        int [][] aSum = new int[N][N]; // 2차 배열 메모리 초과
+        int [][] bSum = new int[N][N];
+
+        int cnt=0;
+
+        for (int i = 0; i < N; i++) { // 시간도 초과 N*N 임
+
+            aSum[i][i]=a[i];
+            bSum[i][i]=b[i];
+
+            if(a[i]==b[i]){
+                cnt++;
+            }
+            for (int j = 1; j < N; j++) {
+
+                aSum[i][j]=aSum[i][j-1]+a[j];
+                bSum[i][j]=bSum[i][j-1]+b[j];
+
+                if(aSum[i][j]==bSum[i][j])
+                    cnt++;
+
+
+            }
+        }
+
+        return cnt;
+    }
+
+
+
+    static int sameSum02(int[] a, int[] b){ // 메모리 초과
+        int [][] aSum = new int[N][2*N]; // 2차 배열 메모리 무조건 초과
+        int [][] bSum = new int[N][2*N];
+
+        int cnt=0;
+
+        for (int i = 0; i < N; i++) { // N*N 이라서 시간도 초과했을 듯
+
+            aSum[i][i]=a[i];
+            bSum[i][i]=b[i];
+
+            if(a[i]==b[i]){
+                cnt++;
+            }
+            for (int j = i+1; j < N; j++) {
+
+                aSum[i][j]=aSum[i][j-1]+a[j];
+                bSum[i][j]=bSum[i][j-1]+b[j];
+
+                if(aSum[i][j]==bSum[i][j])
+                    cnt++;
+
+
+            }
+        }
+
+        return cnt;
+    }
+
+
+    static int sameSum01(int[] a, int[] b){ // 시간초과, 메모리도 초과했을 것 같음
+        int [] aSum = new int[2*N];
+        int [] bSum = new int[2*N];
+
+        int cnt=0; // 불필요하게 for 3번, N*N*(logN)
+        for (int i = 0; i < N; i++) {
+            if(a[i]==b[i])
+                cnt++;
+            for (int j = i+1; j < N; j++) {
+                for (int k = i; k < j+1; k++) {
+                    aSum[i+j]+=a[k];
+                    bSum[i+j]+=b[k];
+                }
+                if(aSum[i+j]==bSum[i+j])
+                    cnt++;
+            }
+        }
+        return cnt;
+    }
 }
 
 

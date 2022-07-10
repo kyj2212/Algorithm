@@ -3,6 +3,8 @@ package tree.trie;
 import java.io.*;
 import java.util.StringTokenizer;
 
+// 문자열 비교 String -> byte 연산으로 비교하는 것으로 수정하면 시간이 빨라질까.
+
 public class FindString {
 
     static int N; // 키 문자열의 개수.
