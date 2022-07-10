@@ -7,6 +7,7 @@ public class FindString {
 
     static int N; // 키 문자열의 개수.
     static int M; // 검사해야하는 문자열의 개수
+    static int cnt=0;
 
     public static void main(String[] args) throws IOException {
 
@@ -23,7 +24,6 @@ public class FindString {
 
         String[] S = new String[N];
         String test;
-        int cnt=0;
 
         for (int i = 0; i < N; i++) {
             S[i]=br.readLine();
@@ -34,14 +34,11 @@ public class FindString {
 
         for (int i = 0; i < M; i++) {
             test=br.readLine();
-            if(SearchString(trie,test))
-                cnt++;
+            SearchString(trie,test);
         }
 
 
         br.close();
-
-
 
         System.out.println(cnt);
 
@@ -82,20 +79,19 @@ public class FindString {
 
     }
 
-    static boolean SearchString(TrieNode trie,String test){
+    static void SearchString(TrieNode trie,String test){
         // test 문자열이 trie에 해당하는지 search
 
         for (int i=0;i<test.length();i++){
             char c = test.charAt(i);
             if(trie.child[c-'a']==null) // trie 없으면 꽝
-                return false;
+                break;
             else {
                 trie=trie.child[c-'a'];
                 if(i==test.length()-1&&trie.ifLeaf==true) // test string도 마지막문자여야함.
-                    return true;
+                    cnt++;
             }
         }
-        return false;
     }
 
     static class TrieNode{
