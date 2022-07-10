@@ -10,14 +10,15 @@ public class FindString {
 
     public static void main(String[] args) throws IOException {
 
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+       // BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken()); // 집합 S에 포함되어있는 문자열의 개수
         M = Integer.parseInt(st.nextToken()); // 검사해야 하는 문자열의 개수
+
+
 
 
         String[] S = new String[N];
@@ -90,7 +91,7 @@ public class FindString {
                 return false;
             else {
                 trie=trie.child[c-'a'];
-                if(trie.ifLeaf==true)
+                if(i==test.length()-1&&trie.ifLeaf==true) // test string도 마지막문자여야함.
                     return true;
             }
         }
