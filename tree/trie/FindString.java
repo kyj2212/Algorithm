@@ -63,13 +63,15 @@ public class FindString {
                 if(node.child[c-'a']==null) { // child가 없으면
                     node.child[c-'a']=new TrieNode(); // child 추가
 
-                    // 문자열의 마지막 char 일때
-                    if(i==S[n].length()-1) {
-                        node.ifLeaf=true;
-                        break; // 자식노드로 내려가지말고 해당 string 종료
-                    }
                 }
+                // 현재 node는 마지막 전 문자.
+                // 현재 node의 child[c]가 마지막 문자노드
                 node=node.child[c-'a']; // 자식 노드로 내려가.
+                // 현재 노드가 마지막 노드,
+                // 문자열의 마지막 char 일때
+                if(i==S[n].length()-1) {
+                    node.ifLeaf=true;
+                }
 
             }
         }
