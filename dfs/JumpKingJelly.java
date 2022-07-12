@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 public class JumpKingJelly {
 
     static int N;
-   // static ArrayList<Integer> [] adj;
     static int [][] adj;
 
     public static void main(String[] args) throws IOException {
@@ -21,46 +20,17 @@ public class JumpKingJelly {
         adj = new int [N*N][3];
 
         for (int i = 0; i < N; i++) {
-
             StringTokenizer st = new StringTokenizer(br.readLine()," ");
             for (int j = 0; j < N; j++) {
-
                 adj[i*N+j][0]=Integer.parseInt(st.nextToken()); // val 값을 첫번째로 넣기
-                //i==N-1 바닥 끝
+                if(i!=N-1) //i==N-1 바닥 끝
+                    adj[i*N+j][2]=(i+1)*N+j; // 아래 노드가 인접노드
 
-                if(i!=N-1){ // 아래 노드가 인접노드
-                    adj[i*N+j][2]=(i+1)*N+j;
-                }
-                // j==N-1 오른쪽 끝
-                if(j!=N-1){ // 오른 쪽 노드가 인접노드
-                    adj[i*N+j][1]=i*N+j+1;
-                }
+                if(j!=N-1) // j==N-1 오른쪽 끝
+                    adj[i*N+j][1]=i*N+j+1; // 오른 쪽 노드가 인접노드
             }
         }
 
-
-/*
-        // up and down 합쳐서 판단
-        adj = new ArrayList[N*N];
-
-        for (int i = 0; i < N; i++) {
-
-            StringTokenizer st = new StringTokenizer(br.readLine()," ");
-            for (int j = 0; j < N; j++) {
-                adj[i*N+j] = new ArrayList<>();
-                adj[i*N+j].add(Integer.parseInt(st.nextToken())); // val 값을 첫번째로 넣기
-                //i==N-1 바닥 끝
-
-                if(i!=N-1){ // 아래 노드가 인접노드
-                    adj[i*N+j].add((i+1)*N+j);
-                }
-                // j==N-1 오른쪽 끝
-                if(j!=N-1){ // 오른 쪽 노드가 인접노드
-                    adj[i*N+j].add(i*N+j+1);
-                }
-            }
-        }
-*/
         for(int [] arr : adj){
             for(int i : arr)
                 System.out.printf(i+",");
@@ -72,36 +42,33 @@ public class JumpKingJelly {
     }
 
 
-    /*jump 시 right만, down만 가능*/
-
+    // no jump dfs
     static boolean dfs(int val, int node){
 
-        for(int i=1;i<3;i++){
-
+        for(int i=1;i<3;i++) {
             int next=adj[node][i];
-            if(next==0)
+            if(next==0) // 끝이라서 인접노드 없을 때
                 continue;
             int nextVal = adj[next][0];
             if(val-1 == 0){ // 인접노드 밟을 때
                 if(nextVal==-1) // target 이면 리턴
                     return true;
                 else{ // target 이 아니면
-                    if(nextVal==0){
+                    if(nextVal==0)
                         continue;
-                    }
                     if(dfs(nextVal,next)) // next 에서 다시 dfs
                         return true;
                 }
             } else { // 인접노드 넘어가 그 앞의 노드의 val을 타고가
-                if(dfsJump(val-1,next,i))
+                if(dfsJump(val-1,next,i)) // 현재 direction을 인자로 넘겨
                     return true;
             }
         }
         return false;
     }
 
+    // jump dfs 같은 direction 만 가능
     static boolean dfsJump(int val, int node, int prevdir){
-
 
             int next=adj[node][prevdir];
             if(next==0)
@@ -111,9 +78,8 @@ public class JumpKingJelly {
                 if(nextVal==-1) // target 이면 리턴
                     return true;
                 else{ // target 이 아니면
-                    if(nextVal==0){
+                    if(nextVal==0)
                         return false;
-                    }
                     if(dfs(nextVal,next)) // next 에서 다시 dfs
                         return true;
                 }
@@ -121,41 +87,7 @@ public class JumpKingJelly {
                 if(dfsJump(val-1,next,prevdir))
                     return true;
             }
-
         return false;
     }
-
-
-
-/*
-
-    // jump 시, up+down 조합 가능
-    static boolean dfs01(int val, int node){
-
-        for (int i = 1; i < adj[node].size(); i++) {
-            // 인접노드 : adj[node].get(1 ~ ...)
-            int next = adj[node].get(i);
-            int nextVal = adj[next].get(0);
-            if(val-1 == 0){ // 인접노드 밟을 때
-                if(nextVal==-1) // target 이면 리턴
-                    return true;
-                else{ // target 이 아니면
-                    if(nextVal==0){
-                        continue;
-                    }
-                    if(dfs01(nextVal,next)) // next 에서 다시 dfs
-                        return true;
-                }
-            } else { // 인접노드 넘어가 그 앞의 노드의 val을 타고가
-               if(dfs01(val-1,next))
-                   return true;
-            }
-        }
-        return false;
-    }
-
- */
-
-
 
 }
