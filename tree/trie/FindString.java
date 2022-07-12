@@ -34,6 +34,7 @@ public class FindString {
         TrieNode trie = InsertToTrie(S);
 
 
+        //O(string S.최대 길이)
         for (int i = 0; i < M; i++) {
             test=br.readLine();
             SearchString(trie,test);
