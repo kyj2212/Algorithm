@@ -48,7 +48,7 @@ public class findMinimum {
             int qs=Integer.parseInt(st.nextToken());
             int qe=Integer.parseInt(st.nextToken());
 
-            bw.write(String.valueOf(RMQ(root,0,N-1,qs-1,qe-1))+'\n');
+            bw.write(String.valueOf(RMQ(root,0,N-1,qs-1,qe-1))+"\n");
         }
 
         br.close();
