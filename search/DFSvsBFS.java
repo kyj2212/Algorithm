@@ -44,8 +44,9 @@ public class DFSvsBFS {
         // 작은 순서대로 먼저 방문하기 위해 정렬
         for(int i=1;i<N+1;i++)
             Collections.sort(adj[i]);
+           // adj[i].sort(Comparator.comparingInt(a -> a));
 
-/*
+
         for(ArrayList<Integer> list : adj){
             if(list.isEmpty())
                 continue;
@@ -53,7 +54,7 @@ public class DFSvsBFS {
                 System.out.printf(i+" ");
             System.out.println();
         }
-*/
+
 
         // 그래프 탐색
 
