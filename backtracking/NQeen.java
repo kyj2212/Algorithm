@@ -37,52 +37,77 @@ public class NQeen {
 
 
         System.out.println();
+
+
+
+        tracking();
+
+    }
+
+
+    private static void tracking(){
         int cnt=0;
 
-       // boolean [] allowAll = new boolean[N*N];
         ArrayList<Integer> allowAll = new ArrayList<>();
         for(int i=0;i<N*N;i++)
             allowAll.add(i);
 
+
+        // 모든 노드
         for(int i=0;i<N*N;i++){
             System.out.println("=== start idx : "+i);
-            //boolean [] visited = new boolean[N*N];
-            cnt+=dfs(i,allowAll,1,new boolean[N*N]);
-
+            cnt+=dfs(i,allowAll,1,new boolean[N*N],0);//cnt 초기화
         }
 
+        // 중복 없앤경우
+/*
+
+        int i =0;
+        while(true){
+            System.out.println("=== start idx : "+i);
+            cnt+=dfs(i,allowAll,1,new boolean[N*N],0);//cnt 초기화
+            for (int j = i+1; j < N*N; j++) {
+                if(!adj[i].contains(j)){
+                    i=j;
+                    break;
+                }
+            }
+            if(i>N-1)
+                break;
+        }
+
+*/
         System.out.println(cnt);
 
     }
 
-    private static int dfs(int nodeidx, ArrayList<Integer> allow, int nodeCnt, boolean[] visited) {
+    private static int dfs(int nodeidx, ArrayList<Integer> allow, int nodeCnt, boolean[] visited,int cnt) {
 
         visited[nodeidx]=true; // 방문체크
-        int cnt=0; // 초기화
+
 
         // newallow 구하기
        // boolean [] newAllow= new boolean[N*N];
         ArrayList<Integer> newAllow = new ArrayList<>();
-        System.out.println("nodeidx : "+nodeidx);
+   //       System.out.println("nodeidx : "+nodeidx);
         for(int i : adj[nodeidx]){ // node의 인접노드중에서
             if(allow.contains(i))
                 newAllow.add(i);
         }
-        System.out.println("newallow : "+newAllow);
+       System.out.println("newallow : "+newAllow);
 
         // newAllow 가 비었으면 return
         if(newAllow.size()==0){
-            System.out.println("newAllow is empty, nodeCnt : "+nodeCnt);
-            if(nodeCnt<N)
-                return 0;
-            else return 1;
+            if(nodeCnt>=N)
+                System.out.println("newAllow is empty, nodeCnt : "+nodeCnt);
+            return nodeCnt<N?0:nodeCnt-(N-1);
         }
         // newallow가 있으면 item 으로 dfs
         for(int i : newAllow){
             if(!visited[i]) // 방문안했으면
-                cnt+=dfs(i,newAllow,nodeCnt+1,visited); // 자식노드 dfs
+                cnt+=dfs(i,newAllow,nodeCnt+1,visited,cnt); // 자식노드 dfs
         }
-        System.out.println("dfs("+nodeidx+") : "+cnt);
+        if(cnt!=0)System.out.println("dfs("+nodeidx+") : "+cnt);
         return cnt;
     }
 
