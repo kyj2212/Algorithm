@@ -15,6 +15,7 @@ public class DFSvsBFS {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine()," ");
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         N=Integer.parseInt(st.nextToken());
         M=Integer.parseInt(st.nextToken());
@@ -56,14 +57,13 @@ public class DFSvsBFS {
 
         // 그래프 탐색
 
-        // dfs
         dfsVisited = new boolean[N+1];
-        System.out.println(dfs(V));
+        bw.write(dfs(V)+"\n"+bfs(V));
 
-        // bfs
-        bfs(V);
 
         br.close();
+        bw.flush();
+        bw.close();
 
     }
 
@@ -83,7 +83,7 @@ public class DFSvsBFS {
 
 
     // BFS로 탐색
-    static void bfs(int start){
+    static String bfs(int start){
         // queue 에 넣는다.
 
         String answer="";
@@ -105,7 +105,7 @@ public class DFSvsBFS {
                     queue.add(i);
         }
 
-        System.out.println(answer);
+        return answer;
 
     }
 
