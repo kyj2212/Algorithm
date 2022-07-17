@@ -10,12 +10,13 @@ public class DFSvsBFS {
     static ArrayList<Integer> [] adj;
    // static boolean [][] adj;
     static boolean [] dfsVisited;
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine()," ");
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         N=Integer.parseInt(st.nextToken());
         M=Integer.parseInt(st.nextToken());
@@ -76,9 +77,11 @@ public class DFSvsBFS {
         // 그래프 탐색
 
         dfsVisited = new boolean[N+1];
-        dfs(V,0);
+        dfs(V);
+        bw.write(sb.toString());
         bw.newLine();
         bfs(V);
+        bw.write(sb.toString());
 
         br.close();
         bw.flush();
@@ -91,15 +94,16 @@ public class DFSvsBFS {
     // DFS 로 탐색
     // with 인접 리스트
 
-    private static void dfs(int node, int answer) throws IOException {
+    private static void dfs(int node) throws IOException {
+
         dfsVisited[node]=true;
         // 노드의 child로 가는거니까.
         if(node!=V)
-            bw.write(" ");
-        bw.write(String.valueOf(node));
+            sb.append(" ");
+        sb.append(node);
         for(int i : adj[node]){
             if(!dfsVisited[i])
-                dfs(i,node);
+                dfs(i);
         }
     }
 
@@ -107,6 +111,8 @@ public class DFSvsBFS {
     // BFS로 탐색
     // with 인접 리스트
         static void bfs(int start) throws IOException {
+            sb=new StringBuilder();
+
             // queue 에 넣는다.
 
             //String answer="";
@@ -121,8 +127,8 @@ public class DFSvsBFS {
                 int node = queue.poll();
                 bfsVisited[node]=true;
                 if(node!=start)
-                    bw.write(" ");
-                bw.write(String.valueOf(node));
+                    sb.append(" ");
+                sb.append(node);
                 for(int i : adj[node])
                     if(!queue.contains(i)&&!bfsVisited[i])
                         queue.add(i);
