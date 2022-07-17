@@ -40,7 +40,7 @@ public class NQeen {
 
 
 
-        tracking();
+        //tracking();
 
     }
 
@@ -54,9 +54,9 @@ public class NQeen {
 
 
         // 모든 노드
-        for(int i=0;i<N*N;i++){
-            System.out.println("=== start idx : "+i);
-            cnt+=dfs(i,allowAll,1,new boolean[N*N],0);//cnt 초기화
+        for(int i=0;i<N;i++){
+            System.out.println("=== start idx : "+i*N);
+            cnt+=dfs(i*N,allowAll,1,new boolean[N*N],0);//cnt 초기화
         }
 
         // 중복 없앤경우
@@ -65,7 +65,7 @@ public class NQeen {
         int i =0;
         while(true){
             System.out.println("=== start idx : "+i);
-            cnt+=dfs(i,allowAll,1,new boolean[N*N],0);//cnt 초기화
+            cnt+=search.dfs(i,allowAll,1,new boolean[N*N],0);//cnt 초기화
             for (int j = i+1; j < N*N; j++) {
                 if(!adj[i].contains(j)){
                     i=j;
@@ -102,16 +102,41 @@ public class NQeen {
                 System.out.println("newAllow is empty, nodeCnt : "+nodeCnt);
             return nodeCnt<N?0:nodeCnt-(N-1);
         }
-        // newallow가 있으면 item 으로 dfs
+        // newallow가 있으면 item 으로 search.dfs
         for(int i : newAllow){
             if(!visited[i]) // 방문안했으면
-                cnt+=dfs(i,newAllow,nodeCnt+1,visited,cnt); // 자식노드 dfs
+                cnt+=dfs(i,newAllow,nodeCnt+1,visited,cnt); // 자식노드 search.dfs
         }
-        if(cnt!=0)System.out.println("dfs("+nodeidx+") : "+cnt);
+        if(cnt!=0)System.out.println("search.dfs("+nodeidx+") : "+cnt);
         return cnt;
     }
 
 
+    static void buildTree(){
+        int n=N*N;
+        for (int i = 0; i < n; i++) {
+            adj[i]=new ArrayList<>();
+            int x=i/N;
+            int y=i%N;
+
+            for (int j = 0; j < n; j++) {
+
+                //int xdiff = Math.abs(x-j/N);
+                //int ydiff = Math.abs(y-j%N);
+                if(j/N>x&&j%N!=y&&Math.abs(x-j/N)!=Math.abs(y-j%N))
+                    adj[i].add(j);
+
+            }
+
+        }
+    }
+
+
+
+    // 옛날 트리
+    // 인접 노드 -> 8방향
+
+    /*
     static void buildTree(){
         int n=N*N;
         for (int i = 0; i < n; i++) {
@@ -130,12 +155,11 @@ public class NQeen {
 
         }
     }
+     */
 
-
-
-// dfs 옛날
+// search.dfs 옛날
 /*
-static int dfs(int idx,ArrayList<Integer> prev){
+static int search.dfs(int idx,ArrayList<Integer> prev){
     int cnt=0;
     visited[idx]=true;
     //System.out.println("prev : "+prev);
@@ -147,7 +171,7 @@ static int dfs(int idx,ArrayList<Integer> prev){
             cnt++;
             for(int j:adj[idx]) {
                 if (!visited[j])
-                    dfs(j, adj[idx]);
+                    search.dfs(j, adj[idx]);
             }
         }
     }
@@ -163,7 +187,7 @@ static int dfs(int idx,ArrayList<Integer> prev){
 
         //System.out.println("adj["+idx+"] no "+i+" | cnt : "+cnt);
 
-    System.out.println("dfs("+idx+") : "+cnt);
+    System.out.println("search.dfs("+idx+") : "+cnt);
     return cnt;
 }
 */

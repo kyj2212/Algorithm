@@ -1,10 +1,9 @@
-package dfs;
+package search.dfs;
 
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class JumpKingJelly {
@@ -42,7 +41,7 @@ public class JumpKingJelly {
     }
 
 
-    // no jump dfs
+    // no jump search.dfs
     static boolean dfs(int val, int node){
 
         for(int i=1;i<3;i++) {
@@ -56,7 +55,7 @@ public class JumpKingJelly {
                 else{ // target 이 아니면
                     if(nextVal==0)
                         continue;
-                    if(dfs(nextVal,next)) // next 에서 다시 dfs
+                    if(dfs(nextVal,next)) // next 에서 다시 search.dfs
                         return true;
                 }
             } else { // 인접노드 넘어가 그 앞의 노드의 val을 타고가
@@ -67,7 +66,7 @@ public class JumpKingJelly {
         return false;
     }
 
-    // jump dfs 같은 direction 만 가능
+    // jump search.dfs 같은 direction 만 가능
     static boolean dfsJump(int val, int node, int prevdir){
 
             int next=adj[node][prevdir];
@@ -80,7 +79,7 @@ public class JumpKingJelly {
                 else{ // target 이 아니면
                     if(nextVal==0)
                         return false;
-                    if(dfs(nextVal,next)) // next 에서 다시 dfs
+                    if(dfs(nextVal,next)) // next 에서 다시 search.dfs
                         return true;
                 }
             } else { // 인접노드 넘어가 그 앞의 노드의 val을 타고가
