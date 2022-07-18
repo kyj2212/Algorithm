@@ -10,6 +10,7 @@ public class RangeSumEasy {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine()," ");
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb=new StringBuilder();
 
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
@@ -27,10 +28,12 @@ public class RangeSumEasy {
             st = new StringTokenizer(br.readLine()," ");
             int qs = Integer.parseInt(st.nextToken())-1;
             int qe = Integer.parseInt(st.nextToken())-1;
-            bw.write(String.valueOf(rangeSum(qs,qe, prefixSum)));
-            bw.newLine();
-        }
+            sb.append(rangeSum(qs,qe, prefixSum)).append("\n");
 
+           // bw.write(String.valueOf(rangeSum(qs,qe, prefixSum)));
+            //bw.newLine();
+        }
+        bw.write(sb.toString());
         br.close();
         bw.flush();
         bw.close();
