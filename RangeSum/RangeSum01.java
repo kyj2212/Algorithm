@@ -3,7 +3,14 @@ package RangeSum;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class RangeSumEasy {
+
+/*
+* Easy
+* Range Sum with Prefix Sum
+* input : N , query : M개
+*
+* */
+public class RangeSum01 {
 
     public static void main(String[] args) throws IOException {
 
