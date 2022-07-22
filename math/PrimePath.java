@@ -4,12 +4,14 @@ package math;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class PrimePath {
     static boolean [] noPrime= new boolean[10000];
-    static int cnt=0;
+    static ArrayList<Integer> prime;
+  //  static int cnt=0;
     public static void main(String[] args) throws IOException {
 
 
@@ -25,6 +27,13 @@ public class PrimePath {
         }
 
 
+        prime = new ArrayList<>();
+
+        for(int i=1000;i<10000;i++){
+            if(!noPrime[i])
+                prime.add(i);
+        }
+      //  System.out.println(prime);
 
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,6 +43,7 @@ public class PrimePath {
 
 
 
+/*
         for (int i = 0; i < T; i++) {
             st = new StringTokenizer(br.readLine()," ");
             String input=st.nextToken();
@@ -45,18 +55,22 @@ public class PrimePath {
             sb.append(cntStep(input,output)).append("\n");
         }
 
+*/
 
-        System.out.println(sb.toString());
-/*
-        int [][] input = new int[T][4];
-        int [][] output = new int[T][4];
+
+        int [] input = new int[4];
+        int [] output = new int[4];
         for(int i =0;i<T;i++){
             String [] s = br.readLine().split(" ",2);
-            input[i]=Arrays.stream(s[0].split("",4)).mapToInt(Integer::parseInt).toArray();
-            output[i]=Arrays.stream(s[1].split("",4)).mapToInt(Integer::parseInt).toArray();
+            input=Arrays.stream(s[0].split("",4)).mapToInt(Integer::parseInt).toArray();
+            output=Arrays.stream(s[1].split("",4)).mapToInt(Integer::parseInt).toArray();
+            sb.append(sol02(input,output)).append("\n");
 
         }
-*/
+
+
+        System.out.println(sb.toString());
+
 
 
 
@@ -66,6 +80,78 @@ public class PrimePath {
 
 
     }
+
+    static int[] intToarr(int num){
+        int [] arr = new int[4];
+        arr[0]=num/1000;
+        num=num%1000;
+        arr[1]=num/100;
+        num=num%100;
+        arr[2]=num/10;
+        num=num%10;
+        arr[3]=num;
+        return arr;
+    }
+
+    static int arrToint(int[] arr){
+        return 1000*arr[0]+100*arr[1]+10*arr[2]+arr[3];
+    }
+
+    static int sol02(int[] input, int[] output){
+        int cnt=0;
+        // 소수 중에서 얘랑 한자리만 다른걸 찾는거야!
+        // 그중에서 output 의 값이랑 같은걸 찾는거지
+        // 없으면 작은값부터 먼저 바꿔
+
+        int sio=hasSame(input,output);
+        for(int i=0;i<prime.size();i++){
+            int [] target = intToarr(prime.get(i));
+            if(hasSame(input,target)==3){
+                int sto=hasSame(target,output);
+                if(sto==4)
+                    break;
+                else if(sio<sto){
+                    input=target;
+                    sio=hasSame(input,output);
+                    cnt++;
+                    continue;
+                }
+                else if(i==prime.size()-1){
+                    input=target;
+                    sio=hasSame(input,output);
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+
+    static int hasSame(int[] a, int[] b){
+        int same=0;
+        for(int i=0;i<4;i++){
+            if(a[i]==b[i]){
+                same++;
+            }
+        }
+        return same;
+    }
+
+    static boolean changeable(int[] input, int[] target){
+        int diff=0;
+        for(int i=0;i<4;i++){
+            if(diff>1)
+                return false;
+            if(input[i]!=target[i]){
+                diff++;
+            }
+        }
+        if(diff==1)
+            return true;
+        else return false;
+    }
+
+
+    /*
 
     static int cntStep(String input, String output){
         cnt =0;
@@ -129,7 +215,7 @@ public class PrimePath {
         return strb.toString();
     }
 
-
+*/
 
 
 }
