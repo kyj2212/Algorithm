@@ -14,26 +14,23 @@ public class GetPrime {
         int M=Integer.parseInt(st.nextToken());
         int N=Integer.parseInt(st.nextToken());
 
-        int [] prime = new int[N+1];
-        for (int i = (M>1?M:2); i <=N ; i++) { // i=M 부터 했더니 실패, 왜? M=1 일때, 1이 들어가는구나
-            prime[i]=i;
-        }
-
-        for(int i=2;i<=Math.sqrt(N);i++){  //  x < Math.sqrt(N) <x+1 일때, x로 하면된다. 어짜피 마지막 값 N < (x+1)*(x+1) 이므로, (x+1) 의 순서를 볼필요가 없음
-            for (int j = i; i*j<N+1 ; j++) {
-                if(i*j<M)
-                    continue;
-                prime[i*j]=0;
-            }
-        }
-
-        for(int i : prime){
-            if(i!=0&&i>=M) {
+        // prime[i] , isPrime : false, noPrime : true
+        boolean [] prime = new boolean[N+1];
+        prime[0]=prime[1]=true;
+        for(int i=2;i<=N;i++){  //  x < Math.sqrt(N) <x+1 일때, x로 하면된다. 어짜피 마지막 값 N < (x+1)*(x+1) 이므로, (x+1) 의 순서를 볼필요가 없음
+            if(prime[i]) // 이걸 모르겠어. i 가 true면, i 는 소수가 아닌거잖아. 4 야. 2때문에 4는 true 잖아. 4의 배수는 안해? 아.. 할필요없구나. 4의 배수는 2의 배수니까.
+                continue;
+            if(i>=M)
                 sb.append(i).append("\n");
+            if(i>Math.sqrt(N))
+                continue;
+            for (int j = i*i; j<N+1 ; j+=i) {
+                prime[j]=true;
             }
         }
 
-        br.close();
+
         System.out.println(sb.toString());
+        br.close();
     }
 }
