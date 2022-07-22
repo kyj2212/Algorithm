@@ -10,6 +10,7 @@ public class GetPrime {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb= new StringBuilder();
         int M=Integer.parseInt(st.nextToken());
         int N=Integer.parseInt(st.nextToken());
 
@@ -28,13 +29,11 @@ public class GetPrime {
 
         for(int i : prime){
             if(i!=0&&i>=M) {
-                bw.write(String.valueOf(i));
-                bw.newLine();
+                sb.append(i).append("\n");
             }
         }
 
         br.close();
-        bw.flush();
-        bw.close();
+        System.out.println(sb.toString());
     }
 }
