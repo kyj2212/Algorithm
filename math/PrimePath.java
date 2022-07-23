@@ -30,24 +30,18 @@ public class PrimePath {
                 prime.add(i);
         }
 
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
         StringBuilder sb = new StringBuilder();
         int T = Integer.parseInt(br.readLine());
 
-
-
-        int [] input = new int[4];
-        int [] output = new int[4];
         for(int i =0;i<T;i++){
-            String [] s = br.readLine().split(" ",2);
-            input=Arrays.stream(s[0].split("",4)).mapToInt(Integer::parseInt).toArray();
-            output=Arrays.stream(s[1].split("",4)).mapToInt(Integer::parseInt).toArray();
+            st = new StringTokenizer(br.readLine()," ");
+            int input = Integer.parseInt(st.nextToken());
+            int output = Integer.parseInt(st.nextToken());
             int answer=sol04(input,output);
             sb.append(answer<0?"Impossible":answer).append("\n");
         }
-
 
         System.out.println(sb.toString());
         br.close();
@@ -70,16 +64,15 @@ public class PrimePath {
         }
     }
 
-    static int sol04(int[] input, int[] output){
+    static int sol04(int input, int output){
 
 
         Queue<Node> queue = new LinkedList<>();
-       // boolean [][] visited = new boolean[9000][10000];
         ArrayList<boolean[]> visitedlist = new ArrayList<>();
 
         // 초기값 input 을 넣고
         int cnt=0;
-        Node node =new Node(arrToint(input),cnt);
+        Node node =new Node(input,cnt);
         queue.add(node);
 
         while(!queue.isEmpty()){
@@ -94,168 +87,80 @@ public class PrimePath {
                 visitedlist.get(cnt)[node.val]=true;
             }
 
-            if(node.val==arrToint(output)) {
+            if(node.val==output) {
                 return node.cnt;
             }
-
-            input = intToarr(node.val);
 
             // 한자리수가 다른 소수 구해서 queue 에 넣기
             for(int i : prime){
                 // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
-                if(diffOne(input,intToarr(i))&&!visitedlist.get(cnt)[i]){
+                if(diffOne(0,node.val,i,1000)&&!visitedlist.get(cnt)[i]){
                     queue.add(new Node(i,node.cnt+1));
                 }
             }
-
         }
-
-
         return -1;
-
-
     }
 
-
-
-    static int[] intToarr(int num){
-        int [] arr = new int[4];
-        arr[0]=num/1000;
-        num=num%1000;
-        arr[1]=num/100;
-        num=num%100;
-        arr[2]=num/10;
-        num=num%10;
-        arr[3]=num;
-        return arr;
-    }
-
-    static int arrToint(int[] arr){
-        return 1000*arr[0]+100*arr[1]+10*arr[2]+arr[3];
-    }
-    static boolean diffOne(int[] input, int[] target){
-        int diff=0;
-        for(int i=0;i<4;i++){
-            if(diff>1)
+    static boolean diffOne(int diff, int input, int target, int idx){
+        boolean result=false;
+        if((input/idx)!=(target/idx)){
+            if(++diff>1)
                 return false;
-            if(input[i]!=target[i]){
-                diff++;
-            }
+        }
+        if(idx==1){
+            if(diff==1) return true;
+        } else result=diffOne(diff,input%idx,target%idx,idx/10);
+        return result;
+    }
+
+/*    static boolean diffOne(int input, int target){
+        int diff=0;
+
+        if((input/1000)!=(target/1000)){
+            if(++diff>1)
+                return false;
+        }
+        input=input%1000;
+        target=target%1000;
+        if((input/100)!=(target/100)){
+            if(++diff>1)
+                return false;
+        }
+        input=input%100;
+        target=target%100;
+        if((input/10)!=(target/10)){
+            if(++diff>1)
+                return false;
+        }
+        input=input%10;
+        target=target%10;
+        if((input)!=(target)){
+            if(++diff>1)
+                return false;
         }
         if(diff==1)
             return true;
         else return false;
-    }
+    }*/
 
 
-
-    static int sol02(int[] input, int[] output){
-        int cnt=0;
-        // 소수 중에서 얘랑 한자리만 다른걸 찾는거야!
-        // 그중에서 output 의 값이랑 같은걸 찾는거지
-        // 없으면 작은값부터 먼저 바꿔
-
-        int sio=hasSame(input,output);
-        for(int i=0;i<prime.size();i++){
-            int [] target = intToarr(prime.get(i));
-            if(hasSame(input,target)==3){
-                int sto=hasSame(target,output);
-                if(sto==4)
-                    break;
-                else if(sio<sto){
-                    input=target;
-                    sio=hasSame(input,output);
-                    cnt++;
-                    continue;
-                }
-                else if(i==prime.size()-1){
-                    input=target;
-                    sio=hasSame(input,output);
-                    cnt++;
-                }
+/*    static boolean diffOne(int input, int target){
+        int diff=0;
+        for(int i=3;i>=0;i--){
+            if(diff>1)
+                return false;
+            if((input/(int)Math.pow(10,i))!=(target/(int)Math.pow(10,i))){
+                diff++;
             }
+            input=input%(int)Math.pow(10,i);
+            target=target%(int)Math.pow(10,i);
         }
-        return cnt;
-    }
+        if(diff==1)
+            return true;
+        else return false;
+    }*/
 
-    static int hasSame(int[] a, int[] b){
-        int same=0;
-        for(int i=0;i<4;i++){
-            if(a[i]==b[i]){
-                same++;
-            }
-        }
-        return same;
-    }
-
-
-
-
-    /*
-
-    static int cntStep(String input, String output){
-        cnt =0;
-
-        for(int i=0;i<4;i++){
-
-            String newInput=change(input,i,intAt(output,i));
-            if(isPrime(newInput)) { // 소수이면
-                input=newInput;
-                cnt++;
-                continue;
-            }
-
-            for (int j = i<1?1:0; j < 10; j++) {
-
-                if(j==intAt(input,i))
-                    continue;
-
-                newInput=change(input,i,j);
-                if(isPrime(newInput)) { // 소수이면
-                    input=newInput;
-                    cnt++;
-                    break;
-                }
-
-            }
-        }
-
-        if(input.equals(output))
-            return cnt;
-        else return -1;
-    }
-    static boolean isPrime(String input){
-        return !noPrime[Integer.parseInt(input)];
-    }
-
-    static String change(String input,int idx, int n){
-        String newInput=changeOne(input,idx,n);
-
-        return newInput;
-    }
-
-    static int[] getIntArr (String num){
-        int[] arr= Arrays.stream(num.split("",4))
-                .mapToInt(Integer::parseInt)
-                .toArray();
-        return arr;
-    }
-
-    static int intAt(String num,int idx){
-        return getIntArr(num)[idx];
-    }
-
-    static String changeOne(String input, int idx, int n){
-        int[] arr= getIntArr(input);
-        arr[idx]=n;
-        StringBuilder strb = new StringBuilder();
-
-        strb.append(Arrays.toString(arr).replaceAll("[^0-9]",""));
-
-        return strb.toString();
-    }
-
-*/
 
 
 }
