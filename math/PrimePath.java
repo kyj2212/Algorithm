@@ -63,37 +63,29 @@ public class PrimePath {
     static class Node{
         int val;
         int cnt;
-       // boolean [] visited;
-        ArrayList<Integer> visited;
 
-        Node(int val, int cnt,ArrayList<Integer> visited){
+        Node(int val, int cnt){
             this.val=val;
             this.cnt=cnt;
-            this.visited=new ArrayList<>();
-            for(int i : visited)
-                this.visited.add(i);
-            this.visited.add(val);
         }
-
     }
 
     static int sol04(int[] input, int[] output){
 
 
-
-        int answer=0;
         Queue<Node> queue = new LinkedList<>();
+        boolean [][] visited = new boolean[10000][10000];
 
         // 초기값 input 을 넣고
         int cnt=0;
-        Node node =new Node(arrToint(input),cnt,new ArrayList<>());
+        Node node =new Node(arrToint(input),cnt);
         queue.add(node);
 
         while(!queue.isEmpty()){
 
             // 하나 꺼내서 output과 같은지 확인
             node=queue.poll();
-
+            visited[cnt][node.val]=true;
             if(node.val==arrToint(output)) {
                 return node.cnt;
             }
@@ -103,8 +95,8 @@ public class PrimePath {
             // 한자리수가 다른 소수 구해서 queue 에 넣기
             for(int i : prime){
                 // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
-                if(diffOne(input,intToarr(i))&&!node.visited.contains(i)){
-                    queue.add(new Node(i,node.cnt+1,node.visited));
+                if(diffOne(input,intToarr(i))&&!visited[cnt][i]){
+                    queue.add(new Node(i,node.cnt+1));
                 }
             }
 
