@@ -7,15 +7,15 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class PrimePath {
-    static boolean [] noPrime= new boolean[10000];
+
     static ArrayList<Integer> prime;
-  //  static int cnt=0;
     public static void main(String[] args) throws IOException {
 
 
 
         // 4자리 소수 모두 구하기
         // 소수이면 false, 배수이면 true
+        boolean [] noPrime= new boolean[10000];
         noPrime[0]=noPrime[1]=true;
         for(int i=2;i<=Math.sqrt(9999);i++){
             if(noPrime[i])
@@ -24,36 +24,11 @@ public class PrimePath {
                 noPrime[j]=true;
         }
 
-
-        System.out.println(noPrime[3314]);
         prime = new ArrayList<>();
-
         for(int i=1000;i<10000;i++){
             if(!noPrime[i])
                 prime.add(i);
         }
-          System.out.println(prime);
-/*
-        for(int i=0;i<10;i++)
-            if(prime.contains(1033+i*1000))
-                System.out.println(1033+i*1000);
-
-        for(int i=0;i<10;i++)
-            if(prime.contains(1033+i*100))
-                System.out.println(1033+i*100);
-
-
-        for(int i=-3;i<7;i++)
-            if(prime.contains(1033+i*10))
-                System.out.println(1033+i*10);
-
-        for(int i=-3;i<7;i++)
-            if(prime.contains(1033+i))
-                System.out.println(1033+i);
-
-
-*/
-
 
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -63,41 +38,19 @@ public class PrimePath {
 
 
 
-/*
-        for (int i = 0; i < T; i++) {
-            st = new StringTokenizer(br.readLine()," ");
-            String input=st.nextToken();
-            String output=st.nextToken();
-
-            int answer=cntStep(input,output);
-            if(answer==-1)
-                sb.append("Impossible").append("\n");
-            sb.append(cntStep(input,output)).append("\n");
-        }
-
-*/
-
-
         int [] input = new int[4];
         int [] output = new int[4];
         for(int i =0;i<T;i++){
             String [] s = br.readLine().split(" ",2);
             input=Arrays.stream(s[0].split("",4)).mapToInt(Integer::parseInt).toArray();
             output=Arrays.stream(s[1].split("",4)).mapToInt(Integer::parseInt).toArray();
-            sb.append(sol04(input,output)).append("\n");
-
+            int answer=sol04(input,output);
+            sb.append(answer<0?"Impossible":answer).append("\n");
         }
 
 
         System.out.println(sb.toString());
-
-
-
-
-
-
-
-
+        br.close();
 
     }
 
@@ -110,25 +63,18 @@ public class PrimePath {
     static class Node{
         int val;
         int cnt;
+       // boolean [] visited;
+        ArrayList<Integer> visited;
 
-       // ArrayList<Node> befores;
-        boolean [] visited;
-        ArrayList<Integer> list;
-
-        Node(int val, int cnt,ArrayList<Integer> list){
+        Node(int val, int cnt,ArrayList<Integer> visited){
             this.val=val;
             this.cnt=cnt;
-            this.list=list;
+            this.visited=new ArrayList<>();
+            for(int i : visited)
+                this.visited.add(i);
+            this.visited.add(val);
         }
-        Node(int val, int cnt, boolean [] visited,ArrayList<Integer> list){
-            this.val=val;
-            this.cnt=cnt;
-            this.visited=visited;
-            this.list=list;
-        }
-        void addList(){
-            this.list.add(this.val);
-        }
+
     }
 
     static int sol04(int[] input, int[] output){
@@ -149,94 +95,27 @@ public class PrimePath {
             node=queue.poll();
 
             if(node.val==arrToint(output)) {
-                System.out.println(node.list);
-                break;
+                return node.cnt;
             }
 
             input = intToarr(node.val);
 
             // 한자리수가 다른 소수 구해서 queue 에 넣기
-            // cnt=findAvailable(queue,intToarr(node),cnt);
             for(int i : prime){
-                // 소수 중에 input 값이랑 하나만 다르고, 큐에 넣은적 없으면 큐에 넣어
-                if(diffOne(input,intToarr(i))&&!node.list.contains(i)){
-                    ArrayList<Integer> nextlist = new ArrayList<>();
-                    for(int n : node.list)
-                        nextlist.add(n);
-                    nextlist.add(node.val);
-                    queue.add(new Node(i,node.cnt+1,nextlist));
+                // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
+                if(diffOne(input,intToarr(i))&&!node.visited.contains(i)){
+                    queue.add(new Node(i,node.cnt+1,node.visited));
                 }
             }
-            //   node.list.add(node.val);
+
         }
 
 
-        return node.cnt;
+        return -1;
 
 
     }
 
-
-
-    static int sol03(int[] input, int[] output){
-
-
-
-        int answer=0;
-        Queue<Node> [] queue = new LinkedList[noPrime.length];
-       // for(Queue<Node> q : queue)
-       //     q=new LinkedList<>();
-        for(int i=0;i<noPrime.length;i++)
-            queue[i]=new LinkedList<>();
-        // 초기값 input 을 넣고
-        int cnt=0;
-        Node node =new Node(arrToint(input),cnt,new boolean[noPrime.length],new ArrayList<>());
-        queue[cnt].add(node);
-
-        while(!queue[cnt].isEmpty()){
-
-            // 하나 꺼내서 output과 같은지 확인
-            node=queue[cnt].poll();
-            cnt=node.cnt;
-         //   if(node.visited[node.val])
-          //      continue;
-            if(node.list.contains(node.val))
-                continue;
-            if(node.val==arrToint(output)) {
-                System.out.println(node.val);
-                break;
-            }
-            node.addList();
-            // 한자리수가 다른 소수 구해서 queue 에 넣기
-           // cnt=findAvailable(queue,intToarr(node),cnt);
-            for(int i : prime){
-                // 소수 중에 input 값이랑 하나만 다르고, 큐에 넣은적 없으면 큐에 넣어
-                if(diffOne(input,intToarr(i))&&!node.list.contains(i))
-                    queue[cnt].add(new Node(i,node.cnt+1,node.visited,node.list));
-            }
-         //   node.list.add(node.val);
-        }
-
-
-        return node.cnt;
-
-
-    }
-
-
-    static void bfs(boolean[] visited, int[] input, int[] output){
-
-    }
-
-
-    static int findAvailable(Queue<Integer> queue, int[] input,int cnt){
-        for(int i : prime){
-            // 소수 중에 input 값이랑 하나만 다르면 큐에 넣어
-            if(diffOne(input,intToarr(i)))
-                queue.add(i);
-        }
-        return ++cnt;
-    }
 
 
     static int[] intToarr(int num){
@@ -254,6 +133,21 @@ public class PrimePath {
     static int arrToint(int[] arr){
         return 1000*arr[0]+100*arr[1]+10*arr[2]+arr[3];
     }
+    static boolean diffOne(int[] input, int[] target){
+        int diff=0;
+        for(int i=0;i<4;i++){
+            if(diff>1)
+                return false;
+            if(input[i]!=target[i]){
+                diff++;
+            }
+        }
+        if(diff==1)
+            return true;
+        else return false;
+    }
+
+
 
     static int sol02(int[] input, int[] output){
         int cnt=0;
@@ -294,19 +188,7 @@ public class PrimePath {
         return same;
     }
 
-    static boolean diffOne(int[] input, int[] target){
-        int diff=0;
-        for(int i=0;i<4;i++){
-            if(diff>1)
-                return false;
-            if(input[i]!=target[i]){
-                diff++;
-            }
-        }
-        if(diff==1)
-            return true;
-        else return false;
-    }
+
 
 
     /*
