@@ -9,13 +9,14 @@ import java.util.*;
 public class PrimePath {
 
     static ArrayList<Integer> prime;
+    static boolean [] noPrime;
     public static void main(String[] args) throws IOException {
 
 
 
         // 4자리 소수 모두 구하기
         // 소수이면 false, 배수이면 true
-        boolean [] noPrime= new boolean[10000];
+        noPrime= new boolean[10000];
         noPrime[0]=noPrime[1]=true;
         for(int i=2;i<=Math.sqrt(9999);i++){
             if(noPrime[i])
@@ -92,12 +93,22 @@ public class PrimePath {
             }
 
             // 한자리수가 다른 소수 구해서 queue 에 넣기
-            for(int i : prime){
+            for(int i =1000;i<10000;i++){
+                if(!noPrime[i]){
+                    // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
+                    if(diffOne(0,node.val,i,1000)&&!visitedlist.get(cnt)[i]){
+                        queue.add(new Node(i,node.cnt+1));
+                    }
+                }
+            }
+
+
+/*            for(int i : prime){
                 // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
                 if(diffOne(0,node.val,i,1000)&&!visitedlist.get(cnt)[i]){
                     queue.add(new Node(i,node.cnt+1));
                 }
-            }
+            }*/
         }
         return -1;
     }
@@ -113,53 +124,6 @@ public class PrimePath {
         } else result=diffOne(diff,input%idx,target%idx,idx/10);
         return result;
     }
-
-/*    static boolean diffOne(int input, int target){
-        int diff=0;
-
-        if((input/1000)!=(target/1000)){
-            if(++diff>1)
-                return false;
-        }
-        input=input%1000;
-        target=target%1000;
-        if((input/100)!=(target/100)){
-            if(++diff>1)
-                return false;
-        }
-        input=input%100;
-        target=target%100;
-        if((input/10)!=(target/10)){
-            if(++diff>1)
-                return false;
-        }
-        input=input%10;
-        target=target%10;
-        if((input)!=(target)){
-            if(++diff>1)
-                return false;
-        }
-        if(diff==1)
-            return true;
-        else return false;
-    }*/
-
-
-/*    static boolean diffOne(int input, int target){
-        int diff=0;
-        for(int i=3;i>=0;i--){
-            if(diff>1)
-                return false;
-            if((input/(int)Math.pow(10,i))!=(target/(int)Math.pow(10,i))){
-                diff++;
-            }
-            input=input%(int)Math.pow(10,i);
-            target=target%(int)Math.pow(10,i);
-        }
-        if(diff==1)
-            return true;
-        else return false;
-    }*/
 
 
 
