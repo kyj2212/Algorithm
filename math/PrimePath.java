@@ -8,34 +8,15 @@ import java.util.*;
 
 public class PrimePath {
 
-    static ArrayList<Integer> prime;
-    static boolean [] noPrime;
+    static ArrayList<Integer> prime= new ArrayList<>();
     public static void main(String[] args) throws IOException {
-
-
-
-        // 4자리 소수 모두 구하기
-        // 소수이면 false, 배수이면 true
-        noPrime= new boolean[10000];
-        noPrime[0]=noPrime[1]=true;
-        for(int i=2;i<=Math.sqrt(9999);i++){
-            if(noPrime[i])
-                continue;
-            for(int j=i*i;j<=9999;j+=i)
-                noPrime[j]=true;
-        }
-
-        prime = new ArrayList<>();
-        for(int i=1000;i<10000;i++){
-            if(!noPrime[i])
-                prime.add(i);
-        }
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
         StringBuilder sb = new StringBuilder();
         int T = Integer.parseInt(br.readLine());
 
+        getPrime();
         for(int i =0;i<T;i++){
             st = new StringTokenizer(br.readLine()," ");
             int input = Integer.parseInt(st.nextToken());
@@ -65,6 +46,23 @@ public class PrimePath {
         }
     }
 
+    static void getPrime(){
+        // 4자리 소수 모두 구하기
+        // 소수이면 false, 배수이면 true
+        boolean [] noPrime= new boolean[10000];
+        noPrime[0]=noPrime[1]=true;
+        for(int i=2;i<=Math.sqrt(9999);i++){
+            if(noPrime[i])
+                continue;
+            for(int j=i*i;j<=9999;j+=i)
+                noPrime[j]=true;
+        }
+        for(int i=1000;i<10000;i++){
+            if(!noPrime[i])
+                prime.add(i);
+        }
+    }
+
     static int sol04(int input, int output){
 
 
@@ -87,28 +85,16 @@ public class PrimePath {
             }else{
                 visitedlist.get(cnt)[node.val]=true;
             }
-
             if(node.val==output) {
                 return node.cnt;
             }
-
             // 한자리수가 다른 소수 구해서 queue 에 넣기
-            for(int i =1000;i<10000;i++){
-                if(!noPrime[i]){
-                    // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
-                    if(diffOne(0,node.val,i,1000)&&!visitedlist.get(cnt)[i]){
-                        queue.add(new Node(i,node.cnt+1));
-                    }
-                }
-            }
-
-
-/*            for(int i : prime){
+            for(int i : prime){
                 // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
                 if(diffOne(0,node.val,i,1000)&&!visitedlist.get(cnt)[i]){
                     queue.add(new Node(i,node.cnt+1));
                 }
-            }*/
+            }
         }
         return -1;
     }
