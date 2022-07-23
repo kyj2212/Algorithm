@@ -74,7 +74,8 @@ public class PrimePath {
 
 
         Queue<Node> queue = new LinkedList<>();
-        boolean [][] visited = new boolean[10000][10000];
+       // boolean [][] visited = new boolean[9000][10000];
+        ArrayList<boolean[]> visitedlist = new ArrayList<>();
 
         // 초기값 input 을 넣고
         int cnt=0;
@@ -85,7 +86,14 @@ public class PrimePath {
 
             // 하나 꺼내서 output과 같은지 확인
             node=queue.poll();
-            visited[cnt][node.val]=true;
+            if(visitedlist.size()<=cnt){
+                boolean [] visited= new boolean[10000];
+                visited[node.val]=true;
+                visitedlist.add(visited);
+            }else{
+                visitedlist.get(cnt)[node.val]=true;
+            }
+
             if(node.val==arrToint(output)) {
                 return node.cnt;
             }
@@ -95,7 +103,7 @@ public class PrimePath {
             // 한자리수가 다른 소수 구해서 queue 에 넣기
             for(int i : prime){
                 // 소수 중에 input 값이랑 하나만 다르고, 그 노드가 이전에 방문한적 없으면
-                if(diffOne(input,intToarr(i))&&!visited[cnt][i]){
+                if(diffOne(input,intToarr(i))&&!visitedlist.get(cnt)[i]){
                     queue.add(new Node(i,node.cnt+1));
                 }
             }
