@@ -31,7 +31,7 @@ public class RemainRangeSum {
         }
 
         for(int i=0;i<M;i++){
-            if(remain[i]>1)
+            if(remain[i]>1)  // prefix 가 같은경우
                 cnt+=(((long)remain[i]*(remain[i]-1L))/2L);
         }
         bw.write(String.valueOf(cnt+(long)remain[0]));
