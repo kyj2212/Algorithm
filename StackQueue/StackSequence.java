@@ -1,61 +1,52 @@
 package StackQueue;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Stack;
 
 public class StackSequence {
 
-    static int [] input;
+
     static Stack<Integer> stack = new Stack<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
+        boolean invalid=false;
 
-        // input 값 받기
-         input = new int[n];
-        for(int i =0;i<n;i++){
-            input[i]=Integer.parseInt(br.readLine());
-        }
-
-        int start=1;
-        int max=0;
-
-        for(int i=0;i<n-1;i++){
-            // 다음값보다 크면 넘어가
-            if(input[i]>input[i+1]){
-                // i+1 이 마지막 값일 때
-                if(i==n-2){
-                    cal(i+1, start, max, sb);
+        int input;
+        int end=0;
+        for (int i = 0; i < n; i++) {
+            input = Integer.parseInt(br.readLine());
+            if(stack.contains(input)){
+                if(stack.peek()==input){
+                    stack.pop();
+                    sb.append("-").append("\n");
+                }else{
+                    invalid=true;
+                    break;
                 }
-            }
-            else{
-                cal(i,start,max,sb);
-                start=input[max]+1;
-                max=i+1;
+            }else{
+                for(int num=end+1;num<=input;num++){
+                    stack.push(num);
+                    sb.append("+").append("\n");
+                }
+                end=input;
+                stack.pop();
+                sb.append("-").append("\n");
             }
         }
 
-        if(!stack.isEmpty()){
+
+        if (invalid) {
             System.out.println("NO");
-        }else{
+        } else {
             System.out.println(sb.toString());
         }
         br.close();
     }
 
-    public static void cal(int i, int start, int max, StringBuilder sb) {
-        for(int j=start;j<=input[max];j++){
-            stack.push(j);
-            sb.append("+").append("\n");
-        }
-        for(int j=max;j<=i;j++){
-            if(input[j]== stack.peek()){
-                stack.pop();
-                sb.append("-").append("\n");
-            }
-        }
-    }
+
 }
