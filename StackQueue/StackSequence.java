@@ -14,26 +14,26 @@ public class StackSequence {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
-        boolean invalid=false;
+        boolean invalid = false;
 
         int input;
-        int end=0;
+        int end = 0;
         for (int i = 0; i < n; i++) {
             input = Integer.parseInt(br.readLine());
-            if(stack.contains(input)){
-                if(stack.peek()==input){
-                    stack.pop();
-                    sb.append("-").append("\n");
-                }else{
-                    invalid=true;
+
+            if (!stack.isEmpty()&&stack.peek() == input) {
+                stack.pop();
+                sb.append("-").append("\n");
+            } else {
+                if (end + 1 > input) {
+                    invalid = true;
                     break;
                 }
-            }else{
-                for(int num=end+1;num<=input;num++){
+                for (int num = end + 1; num <= input; num++) {
                     stack.push(num);
                     sb.append("+").append("\n");
                 }
-                end=input;
+                end = input;
                 stack.pop();
                 sb.append("-").append("\n");
             }
