@@ -11,6 +11,7 @@ public class ChickenTopN {
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
@@ -24,10 +25,13 @@ public class ChickenTopN {
         int[][] result = mergeSort(2,k,divide(1,input));
         for(int[] s : result){
             for(int i : s){
-                System.out.printf(i+" ");
+                bw.write(String.valueOf(i));
+                bw.write(" ");
             }
         }
-
+        bw.flush();
+        bw.close();
+        br.close();
     }
     public static int[][] divide(int start, int[] input){
         // 분할
@@ -52,12 +56,10 @@ public class ChickenTopN {
                 if(start1==data1.length){
                     sub[i][j]=data2[start2];
                     start2++;
-                }
-                else if(start2==data2.length){
+                } else if(start2==data2.length){
                     sub[i][j]=data1[start1];
                     start1++;
-                }
-                else if(data1[start1]<data2[start2]){
+                } else if(data1[start1]<data2[start2]){
                     sub[i][j]=data1[start1];
                     start1++;
                     continue;
