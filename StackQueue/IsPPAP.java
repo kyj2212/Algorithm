@@ -1,6 +1,6 @@
 package StackQueue;
 
-import org.jetbrains.annotations.NotNull;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -265,7 +265,7 @@ class PPAP {
         this("PP");
     }
 
-    public PPAP(@NotNull String str) {
+    public PPAP(String str) {
 
 
         for(int i = 0;i<str.length();i++){
