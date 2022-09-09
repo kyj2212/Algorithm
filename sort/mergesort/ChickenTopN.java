@@ -61,8 +61,7 @@ public class ChickenTopN {
                     sub[i][j]=data1[start1];
                     start1++;
                     continue;
-                }
-                else{
+                } else{
                     sub[i][j]=data2[start2];
                     start2++;
                     continue;
