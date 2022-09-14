@@ -58,8 +58,12 @@ public class SharkFireBall {
             }
         }
         for(int i =0;i<N*N;i++){
+            if(cnt[i]==0){
+                continue;
+            }
             if(cnt[i]==1){
                 fireBallList.add(fireBalls.get(idx[i]));
+                continue;
             }
             if(cnt[i]>1 && sumM[i]/5>0){
                 if(direction[i]!=3){ // 모두 홀, 또는 짝
