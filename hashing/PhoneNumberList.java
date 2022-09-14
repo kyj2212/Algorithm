@@ -6,11 +6,17 @@ import java.util.Map;
 
 public class PhoneNumberList {
     public static void main(String[] args) {
-        String[] phone_book = {"12","1122223","1235666666666666666666666","567","88"};
+        String[] phone_book = {"1122223","1235666666666666666666666","12","567","88"};
         boolean answer = true;
 
         Map<String,Boolean> map = new HashMap<>();
-        L1:
+        for(String phone: phone_book){
+            map.put(phone,true);
+        }
+        for(String key : map.keySet()){
+
+        }
+        L1 :
         for(String phone : phone_book){
             for(String key : map.keySet()){
                 if(!findSub(key,phone)){
@@ -22,15 +28,17 @@ public class PhoneNumberList {
         }
         System.out.println(answer);
     }
-    static boolean findSub(String a, String b){
-        BigInteger key,target;
-        if(a.length()> b.length()){
-            key = new BigInteger(b);
-            target = new BigInteger(a.substring(0,b.length()));
-        }else{
-            key = new BigInteger(a);
-            target= new BigInteger(b.substring(0,a.length()));
+    static boolean findSub(String key, String target){
+
+        final int len=key.length();
+        if(len>target.length()){
+            return true;
         }
-        return key.equals(target) ? false : true;
+        for(int i=0;i<len;i++ ){
+            if(key.charAt(i)!=target.charAt(i)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
