@@ -16,44 +16,48 @@ public class SharkFireBall {
         int M = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        List<FireBall> fireBalls = new ArrayList<>();
+        List<int[]> fireBalls = new ArrayList<>();
         for(int i =0;i<M;i++){
             st = new StringTokenizer(br.readLine()," ");
-            fireBalls.add(new FireBall(Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken())));
+            int [] fireball = new int[5]; // r,c,m,s,d
+            for (int j=0;j<5;j++){
+                fireball[j]=Integer.parseInt(st.nextToken());
+            }
+            fireBalls.add(fireball);
         }
 
         for(int i=0;i<K;i++){
-            for(FireBall fireBall : fireBalls){
+            for(int[] fireBall : fireBalls){
                 move(fireBall);
             }
             fireBalls=merge(fireBalls);
         }
         int sum=0;
-        for(FireBall fireBall : fireBalls){
-            sum+=fireBall.m;
+        for(int[] fireBall : fireBalls){
+            sum+=fireBall[2];
         }
 
         System.out.println(sum);
     }
-    static List<FireBall> merge(List<FireBall> fireBalls){
-        List<FireBall> fireBallList = new ArrayList<>();
+    static List<int[]> merge(List<int[]> fireBalls){
+        List<int[]> fireBallList = new ArrayList<>();
 
         int [] sumM = new int[N*N];
         int [] sumS = new int[N*N];
         int [] cnt = new int[N*N];
         int [] idx = new int[N*N];
         int [] direction = new int[N*N]; // 1 모두 짝, 2 모두 홀, 3 다를때
-        for(FireBall fireBall : fireBalls){
-            int r = fireBall.r-1;
-            int c = fireBall.c-1;
+        for(int[] fireBall : fireBalls){
+            int r = fireBall[0]-1;
+            int c = fireBall[1]-1;
             cnt[r*N+c]++;
             idx[r*N+c]=fireBalls.indexOf(fireBall);
-            sumM[r*N+c]+=fireBall.m;
-            sumS[r*N+c]+=fireBall.s;
+            sumM[r*N+c]+=fireBall[2];
+            sumS[r*N+c]+=fireBall[3];
             if(direction[r*N+c]==0){
-                direction[r*N+c]=fireBall.d%2+1;
+                direction[r*N+c]=fireBall[4]%2+1;
             }
-            else if(direction[r*N+c]!=3 && ((fireBall.d%2+1)!=direction[r*N+c])){
+            else if(direction[r*N+c]!=3 && ((fireBall[4]%2+1)!=direction[r*N+c])){
                 direction[r*N+c]=3;
             }
         }
@@ -68,29 +72,30 @@ public class SharkFireBall {
             if(cnt[i]>1 && sumM[i]/5>0){
                 if(direction[i]!=3){ // 모두 홀, 또는 짝
                     for(int j=0;j<=6;j+=2){
-                        fireBallList.add(new FireBall(i/N+1,i%N+1,sumM[i]/5,sumS[i]/cnt[i],j));
+
+                        fireBallList.add(new int[]{i / N + 1, i % N + 1, sumM[i] / 5, sumS[i] / cnt[i], j});
                     }
                 }else{ // 아닐 때
                     for(int j=1;j<=7;j+=2){
-                        fireBallList.add(new FireBall(i/N+1,i%N+1,sumM[i]/5,sumS[i]/cnt[i],j));
+                        fireBallList.add(new int[]{i/N+1,i%N+1,sumM[i]/5,sumS[i]/cnt[i],j});
                     }
                 }
             }
         }
         return fireBallList;
     }
-    static FireBall move(FireBall f){
-        if(f.d==7 || f.d==0 || f.d==1){
-            f.r=left(f.r,f.s%N);
+    static int[] move(int[] f){
+        if(f[4]==7 || f[4]==0 || f[4]==1){
+            f[0]=left(f[0],f[3]%N);
         }
-        if(f.d==5||f.d==4||f.d==3){
-            f.r=right(f.r,f.s%N);
+        if(f[4]==5||f[4]==4||f[4]==3){
+            f[0]=right(f[0],f[3]%N);
         }
-        if(f.d==7||f.d==6||f.d==5){
-            f.c=up(f.c,f.s%N);
+        if(f[4]==7||f[4]==6||f[4]==5){
+            f[1]=up(f[1],f[3]%N);
         }
-        if(f.d==1||f.d==2||f.d==3){
-            f.c=down(f.c,f.s%N);
+        if(f[4]==1||f[4]==2||f[4]==3){
+            f[1]=down(f[1],f[3]%N);
         }
         return f;
     }
@@ -106,25 +111,10 @@ public class SharkFireBall {
     static int down(int c, int s){
         return c+s>N ? c+s-N : c+s;
     }
-    static class FireBall {
-        int r;
-        int c;
-        int m;
-        int s;
-        int d;
 
-        FireBall(int r, int c,  int m, int s, int d){
-            this.r=r;
-            this.c=c;
-            this.m=m;
-            this.s=s;
-            this.d=d;
-        }
-
-    }
-    static void print(List<FireBall> fireBalls){
-        for(FireBall fireBall : fireBalls) {
-            System.out.println(fireBall.r+","+fireBall.c + ", " + fireBall.m + "," + fireBall.s + "," + fireBall.d);
+    static void print(List<int[]> fireBalls){
+        for(int[] fireBall : fireBalls) {
+            System.out.println(fireBall[0]+","+fireBall[1] + ", " + fireBall[2] + "," + fireBall[3] + "," + fireBall[4]);
         }
     }
 }
