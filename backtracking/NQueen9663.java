@@ -15,10 +15,10 @@ public class NQueen9663 {
 
         // 모든 경우의 수 이기 때문에 dfs 로 간다.
 
-        dfs(0,new ArrayList<>() );
+        dfs(0,new int[N][2] );
         System.out.println(cnt);
     }
-    static List<int[]> dfs(int x,List<int[]> queens){
+    static int[][] dfs(int x,int[][] queens){
         if(x==N){
 /*            System.out.println("cnt : "+cnt);
             System.out.println("queen : ");
@@ -27,17 +27,19 @@ public class NQueen9663 {
             }
             System.out.println();*/
             cnt++;
+//            return queens;
             return queens;
         }
         for(int i =0;i<N;i++){
-            if(queens.size()>x){
-                for(int q=queens.size()-1;q>=x;q--)
-                    queens.remove(q);
+            for(int q=N-1;q>=x;q--) {
+                queens[q][0] = 0;
+                queens[q][1] = 0;
             }
             if(isValid(x,i,queens)){
-                queens.add(new int[]{x,i});
-                List<int[]> nQueens = dfs(x+1,queens);
-                queens=nQueens;
+                queens[x][0]=x;
+                queens[x][1]=i;
+                queens=dfs(x+1,queens);
+
             }
         }
         return queens;
@@ -46,9 +48,10 @@ public class NQueen9663 {
 
     // N*N 의 체스판에서 queen 서로 공격하지 못하게 놓는다.
     // queen 은 모든 방향으로 움직일 수 있다. x +- y +- x+y- x-y+ 4방향 이동거리 d N까지 가능
-    private static boolean isValid (int cx, int cy, List<int[]> queens) {
+    private static boolean isValid (int cx, int cy, int[][] queens) {
 
-        for(int[] queen : queens){
+        for(int n=0;n<cx;n++){
+            int[] queen=queens[n];
             int x = queen[0];
             int y = queen[1];
             if(cx==x || cy==y ){
