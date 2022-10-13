@@ -7,7 +7,8 @@ import java.io.InputStreamReader;
 
 public class NQueen9663 {
     static int N;
-    static int cnt =0;
+    static int cnt = 0;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
@@ -19,71 +20,54 @@ public class NQueen9663 {
         for(int r=0;r<N;r++){
             queen[r]=-1;
         }
-
         dfs(0,queen);
+
+
+
         System.out.println(cnt);
     }
-    static int[] dfs(int r,int[] queen){
-        if(r==N){
-            System.out.println(" 현재 row : "+r + " queen : ");
-            for(int i=0;i<N;i++){
-                System.out.printf("( "+i+","+queen[i]+" ) ");
+
+    static int[] dfs(int r, int[] queen) {
+        if (r == N) {
+            System.out.println(" 현재 row : " + r + " queen : ");
+            for (int i = 0; i < N; i++) {
+                System.out.printf("( " + i + "," + queen[i] + " ) ");
             }
             System.out.println();
             cnt++;
             return queen;
         }
 
-        for(int c=0;c<N;c++) {
+        for (int c = 0; c < N; c++) {
 
             if (isValid(r, c, queen)) {
-                queen[r]=c;
-                queen=dfs(r+1,queen);
+                queen[r] = c;
+                queen = dfs(r + 1, queen);
             }
-            queen[r]=-1;
+            queen[r] = -1;
 
         }
-/*            if(!inValid[r][c]){
-                queen[r]=c;
-                boolean[][] backValid = back(inValid);
-                inValid=checkValid(r,c,inValid);
-                queen=dfs(r+1,queen,inValid);
-                inValid=backValid;
-            }
-            queen[r]=-1;
-        }*/
+
         return queen;
     }
 
-    static boolean isValid(int nr,int nc,int[] queen){
-        int r,c;
-        for(int i=0;i<=nr;i++){
-           if(queen[i]==-1){
-               break;
-           }
-           r=i;
-           c=queen[i];
-            if(r==nr| c==nc){
+    static boolean isValid(int nr, int nc, int[] queen) {
+        int r, c;
+        for (int i = 0; i <= nr; i++) {
+            if (queen[i] == -1) {
+                break;
+            }
+            r = i;
+            c = queen[i];
+            if (r == nr | c == nc) {
                 return false;
             }
-           for(int j=1;j<=nr-r;j++){
-               if(r+j==nr && c+j == nc){
-                   return false;
-               }
-               if(r-j==nr && c-j  == nc){
-                   return false;
-               }
-               if(r-j==nr && c+j  == nc){
-                   return false;
-               }
-               if(r+j==nr && c-j  == nc){
-                   return false;
-               }
-           }
+            if(Math.abs(r-nr)==Math.abs(c-nc)){
+                return false;
+            }
         }
         return true;
     }
-
 }
 /*
     private static int[][] checkValid (int x, int y, int[][] queens) {
@@ -145,4 +129,66 @@ public class NQueen9663 {
             }
         }
         return back;
+    }*/
+
+/*
+    static int[] dfs(int r,int[] queen){
+        if(r==N){
+            System.out.println(" 현재 row : "+r + " queen : ");
+            for(int i=0;i<N;i++){
+                System.out.printf("( "+i+","+queen[i]+" ) ");
+            }
+            System.out.println();
+            cnt++;
+            return queen;
+        }
+
+        for(int c=0;c<N;c++) {
+
+            if (isValid(r, c, queen)) {
+                queen[r]=c;
+                queen=dfs(r+1,queen);
+            }
+            queen[r]=-1;
+
+        }
+//            if(!inValid[r][c]){
+//                queen[r]=c;
+//                boolean[][] backValid = back(inValid);
+//                inValid=checkValid(r,c,inValid);
+//                queen=dfs(r+1,queen,inValid);
+//                inValid=backValid;
+//            }
+//            queen[r]=-1;
+//        }
+        return queen;
+    }
+
+    static boolean isValid(int nr,int nc,int[] queen){
+        int r,c;
+        for(int i=0;i<=nr;i++){
+            if(queen[i]==-1){
+                break;
+            }
+            r=i;
+            c=queen[i];
+            if(r==nr| c==nc){
+                return false;
+            }
+            for(int j=1;j<=nr-r;j++){
+                if(r+j==nr && c+j == nc){
+                    return false;
+                }
+                if(r-j==nr && c-j  == nc){
+                    return false;
+                }
+                if(r-j==nr && c+j  == nc){
+                    return false;
+                }
+                if(r+j==nr && c-j  == nc){
+                    return false;
+                }
+            }
+        }
+        return true;
     }*/
