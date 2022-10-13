@@ -25,8 +25,7 @@ public class Ladder{
             if(b+1<=N)
                 ladder[b+1][a]=-1; // b번 - b+1번 세로줄 사이의 a 번째 가로줄이 존재
         }
-//        int cnt = dfs(ladder,0);
-//        int cnt = bfs(ladder);
+//        printLadder(ladder);
         int cnt = addLines(0,ladder,1,1,0);
         System.out.println(cnt);
     }
@@ -35,7 +34,8 @@ public class Ladder{
     private static int addLines(int cnt, int[][] ladder,int vs, int hs,int depth){
 
         if(isSame(ladder)){
-            System.out.println(String.format("성공 : cnt : %d, ",cnt));
+//            System.out.println(String.format("성공 : cnt : %d, ",cnt));
+//            printLadder(ladder);
             return cnt;
         }
         for(int v=vs;v<=N;v++){
@@ -46,93 +46,41 @@ public class Ladder{
                 }
                 ladder=tmp;
                 cnt++;
-                System.out.println(String.format("cnt: %d, (%d,%d) 추가",cnt, v,h));
-                System.out.println(String.format("ladder size: %d, cnt: %d", count(ladder)-M,cnt));
+//                System.out.println(String.format("cnt: %d, (%d,%d) 추가",cnt, v,h));
+//                System.out.println(String.format("ladder size: %d, cnt: %d", count(ladder)-M,cnt));
                 if(isSame(ladder)){
+//                    printLadder(ladder);
                     return cnt;
                 }
                 if(cnt<3){
                     depth = addLines(cnt,ladder,vs,hs,depth);
-                    System.out.println(String.format("depth: %d, cnt: %d", depth,cnt));
+//                    System.out.println(String.format("depth: %d, cnt: %d", depth,cnt));
                     if(depth!=-1){
-                        System.out.println(String.format("depth: %d가 -1이 아닌경우", depth));
+//                        System.out.println(String.format("depth: %d가 -1이 아닌경우", depth));
                         return depth;
                     }
 
                 }
-//                if(cnt!=-1){
-//                    return cnt;
-//                }
                 ladder=delLine(ladder,v,h);
                 cnt--;
-                System.out.println(String.format("cnt: %d, (%d,%d) 제거", cnt,v,h));
-                System.out.println(String.format("ladder size: %d, cnt: %d", count(ladder)-M,cnt));
+//                System.out.println(String.format("cnt: %d, (%d,%d) 제거", cnt,v,h));
+//                System.out.println(String.format("ladder size: %d, cnt: %d", count(ladder)-M,cnt));
             }
         }
-        System.out.println(String.format("cnt : %d,다돌았는데 no same, cnt>=3, cnt -1 반환 ", cnt));
+//        System.out.println(String.format("cnt : %d,다돌았는데 no same, cnt>=3, cnt -1 반환 ", cnt));
         return -1;
     }
 
     private static boolean isSame(int[][] ladder){
         for(int v=1;v<=N;v++){
             if(!down(ladder,v)){
-                System.out.println(String.format("%d 번줄 실패", v));
+//                System.out.println(String.format("%d 번줄 실패", v));
                 return false;
             }
         }
         return true;
     }
 
-/*    private static int bfs(int[][] ladder){
-        Queue<int[]> queue = new LinkedList<>();
-        boolean[][] visited = new boolean[N+1][H+1];
-        int cnt =0;
-
-        if(isSame(ladder,queue,visited)){
-            return cnt;
-        }
-        while(!queue.isEmpty()){
-            int[] q = queue.poll(); // q[v,h]
-            addLine(ladder,q[0],q[1]);
-            cnt++;
-            visited[q[0]][q[1]]=true;
-            if(isSame(ladder,queue,visited)){
-                break;
-            }
-            delLine(ladder,q[0],q[1]);
-            cnt--;
-            visited[q[0]][q[1]]=false;
-            if(cnt>3){
-                cnt=-1;
-                break;
-            }
-        }
-        // 모두 통과
-        // cnt 반환
-        return cnt;
-    }*/
-/*    private static boolean isSame(int[][] ladder, Queue<int[]> queue,boolean[][] visited){
-        boolean answer=true;
-        for(int v=1;v<=N;v++){
-            // v 에 대하여 사다리 타기
-            if(!down(ladder,v)){
-                answer=false;
-                // 하나라도 다르면
-                for(int h=1;h<=H;h++){
-                    if(visited[v][h]){
-                        continue;
-                    }
-                    if(v==N && ladder[v][h]==0 ){
-                        queue.add(new int[]{v,h});
-                    }
-                    if(v<N && ladder[v][h]==0 && ladder[v+1][h]==0){
-                        queue.add(new int[]{v,h});
-                    }
-                }
-            }
-        }
-        return answer;
-    }*/
     private static int[][] addLine(int[][] ladder, int v, int h){
 
         if(v<N && ladder[v][h]==0 && ladder[v+1][h]==0){
@@ -140,10 +88,6 @@ public class Ladder{
             ladder[v+1][h]=-1;
             return ladder;
         }
-//        if(v==N && ladder[v][h]==0){
-//            ladder[v][h]=1;
-//            return ladder;
-//        }
         return null;
     }
     private static int[][] delLine(int[][] ladder, int v, int h){
@@ -153,6 +97,73 @@ public class Ladder{
         ladder[v][h]=0;
         return ladder;
     }
+
+
+    private static boolean down(int[][] ladder,int v){
+        // v 번째 세로줄의 세로줄 타기
+        int i = v;
+        for(int j=1;j<=H;j++){
+
+            if(ladder[i][j]==0){
+                continue;
+            }
+            if(ladder[i][j]==1){
+//                System.out.println(String.format("[1] %d번 줄의 %d번 가로줄을 타고 내려감", i,j));
+                i++;
+//                System.out.println("[1] v : " + i);
+                continue;
+            }
+            if(ladder[i][j]==-1){
+//                System.out.println(String.format("[2] %d번 줄의 %d번 가로줄을 타고 내려감", i,j));
+                i--;
+//                System.out.println("[2] v : " + i);
+                continue;
+            }
+        }
+        if(v!=i){
+//            System.out.println(String.format("사다리결과 : %d 같지않음 %d", v,i));
+            return false;
+        }
+//        System.out.println(String.format("사다리결과 : %d 같음!!! %d", v,i));
+        return true;
+
+    }
+
+    private static int count(int[][] ladder){
+        int cnt =0;
+        for(int i =1;i<=N;i++){
+            for (int j=1;j<=H;j++){
+                if(ladder[i][j]==1){
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+    private static void printLadder(int[][] ladder){
+        for(int i =1 ;i<=N;i++){
+            for(int j=1;j<=H;j++){
+                System.out.printf(String.format("%10d,", ladder[i][j]));
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+}
+
+/*        for(int i =h+1;i<H;i++){
+            if(ladder[v][i]==0){
+                continue;
+            }
+            if(ladder[v][i]==1){
+                System.out.println(String.format("[1] %d번 줄의 %d번 가로줄을 타고 내려감", v,i));
+                v=down(ladder,v+1,i);
+                System.out.println("[1] v : " + v);
+            }
+
+        }
+        // 끝까지 다 타고 내려왔을 때
+        return v;*/
 /*    private static int dfs(int[][] ladder,int cnt){
         System.out.println(String.format("dfs 시작 , cnt : %d , 추가개수 : %d", cnt,count(ladder)-M));
         for(int[] ll : ladder){
@@ -224,61 +235,56 @@ public class Ladder{
         }
         return cnt;
     }*/
-    private static int count(int[][] ladder){
+/*    private static int bfs(int[][] ladder){
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[N+1][H+1];
         int cnt =0;
-        for(int i =1;i<=N;i++){
-            for (int j=1;j<=H;j++){
-                if(ladder[i][j]==1){
-                    cnt++;
+
+        if(isSame(ladder,queue,visited)){
+            return cnt;
+        }
+        while(!queue.isEmpty()){
+            int[] q = queue.poll(); // q[v,h]
+            addLine(ladder,q[0],q[1]);
+            cnt++;
+            visited[q[0]][q[1]]=true;
+            if(isSame(ladder,queue,visited)){
+                break;
+            }
+            delLine(ladder,q[0],q[1]);
+            cnt--;
+            visited[q[0]][q[1]]=false;
+            if(cnt>3){
+                cnt=-1;
+                break;
+            }
+        }
+        // 모두 통과
+        // cnt 반환
+        return cnt;
+    }*/
+/*    private static boolean isSame(int[][] ladder, Queue<int[]> queue,boolean[][] visited){
+        boolean answer=true;
+        for(int v=1;v<=N;v++){
+            // v 에 대하여 사다리 타기
+            if(!down(ladder,v)){
+                answer=false;
+                // 하나라도 다르면
+                for(int h=1;h<=H;h++){
+                    if(visited[v][h]){
+                        continue;
+                    }
+                    if(v==N && ladder[v][h]==0 ){
+                        queue.add(new int[]{v,h});
+                    }
+                    if(v<N && ladder[v][h]==0 && ladder[v+1][h]==0){
+                        queue.add(new int[]{v,h});
+                    }
                 }
             }
         }
-        return cnt;
-    }
-    private static boolean down(int[][] ladder,int v){
-        // v 번째 세로줄의 세로줄 타기
-        int i = v;
-        for(int j=1;j<=H;j++){
-
-            if(ladder[i][j]==0){
-                continue;
-            }
-            if(ladder[i][j]==1){
-                System.out.println(String.format("[1] %d번 줄의 %d번 가로줄을 타고 내려감", i,j));
-                i++;
-                System.out.println("[1] v : " + i);
-                continue;
-            }
-            if(ladder[i][j]==-1){
-                System.out.println(String.format("[2] %d번 줄의 %d번 가로줄을 타고 내려감", i,j));
-                i--;
-                System.out.println("[2] v : " + i);
-                continue;
-            }
-        }
-        if(v!=i){
-            System.out.println(String.format("사다리결과 : %d 같지않음 %d", v,i));
-            return false;
-        }
-        System.out.println(String.format("사다리결과 : %d 같음!!! %d", v,i));
-        return true;
-
-/*        for(int i =h+1;i<H;i++){
-            if(ladder[v][i]==0){
-                continue;
-            }
-            if(ladder[v][i]==1){
-                System.out.println(String.format("[1] %d번 줄의 %d번 가로줄을 타고 내려감", v,i));
-                v=down(ladder,v+1,i);
-                System.out.println("[1] v : " + v);
-            }
-
-        }
-        // 끝까지 다 타고 내려왔을 때
-        return v;*/
-    }
-}
-
+        return answer;
+    }*/
 
 /*
 package backtracking;
