@@ -6,6 +6,7 @@ public class FarthestNode {
     public static void main(String[] args) {
         int n=6;
         int[][] edge ={{3, 6}, {4, 3}, {3, 2}, {1, 3}, {1, 2}, {2, 4}, {5, 2}};
+        int cnt = 0;
 
         // 인접 리스트 구현하기
 
@@ -30,42 +31,32 @@ public class FarthestNode {
 
         //int min=1;
         boolean [] visited = new boolean[n+1];
-        Queue<Node> queue = new PriorityQueue<>();
+        Queue<Integer> queue = new LinkedList<>();
 
-        queue.add(new Node(1,0));
+        queue.add(1);
+        int max = 0;
         while(!queue.isEmpty()){
-            Node node=queue.poll();
-            visited[node.idx]=true;
-            for(int next : adj[node.idx]){
-                dist[next]=Math.min(dist[next],dist[node.idx]+1);
-                if(!visited[next]){
-                    queue.add(new Node(next,dist[next]));
-                }
+            int node=queue.poll();
+            if(visited[node]){
+                continue;
             }
-        }
-        int max =Arrays.stream(dist).max().getAsInt();
-        int cnt =0;
-        for(int i : dist){
-            if(i==max){
+            visited[node]=true;
+//            System.out.println("node: "+node+" max : "+max + " cnt : "+cnt);
+
+            if(max==dist[node]){
                 cnt++;
             }
-        }
-        System.out.println(cnt);
+            if(max<dist[node]){
+                cnt=1;
+                max=dist[node];
+            }
 
+            for(int next : adj[node]){
+                dist[next]=Math.min(dist[next],dist[node]+1);
+                queue.add(next);
+            }
+        }
+//        System.out.println("max : "+max + " cnt : "+cnt);
+    }
 
-    }
-    static class Node implements Comparable<Node>{
-        int idx;
-        int dist;
-        Node(int idx, int dist){
-            this.idx=idx;
-            this.dist=dist;
-        }
-        public int compareTo(Node node){
-           if(node.dist < this.dist){
-               return 1;
-           }
-           return -1;
-        }
-    }
 }
