@@ -30,16 +30,16 @@ public class FarthestNode {
 
         //int min=1;
         boolean [] visited = new boolean[n+1];
-        Queue<Integer> queue = new LinkedList<>();
+        Queue<Node> queue = new PriorityQueue<>();
 
-        queue.add(1);
+        queue.add(new Node(1,0));
         while(!queue.isEmpty()){
-            int node=queue.poll();
-            visited[node]=true;
-            for(int next : adj[node]){
-                dist[next]=Math.min(dist[next],dist[node]+1);
+            Node node=queue.poll();
+            visited[node.idx]=true;
+            for(int next : adj[node.idx]){
+                dist[next]=Math.min(dist[next],dist[node.idx]+1);
                 if(!visited[next]){
-                    queue.add(next);
+                    queue.add(new Node(next,dist[next]));
                 }
             }
         }
@@ -53,5 +53,19 @@ public class FarthestNode {
         System.out.println(cnt);
 
 
+    }
+    static class Node implements Comparable<Node>{
+        int idx;
+        int dist;
+        Node(int idx, int dist){
+            this.idx=idx;
+            this.dist=dist;
+        }
+        public int compareTo(Node node){
+           if(node.dist < this.dist){
+               return 1;
+           }
+           return -1;
+        }
     }
 }
