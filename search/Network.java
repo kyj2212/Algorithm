@@ -5,6 +5,7 @@ import java.util.*;
 public class Network {
 
     static int[] nodes;
+    static int n;
     public static void main(String[] args) {
 
 //        String str = "[1, 1, 0], [1, 1, 1], [0, 1, 1]";
@@ -12,28 +13,39 @@ public class Network {
 //        str  =str.replace(']','}');
 //        System.out.println(str);
 
-        int n = 3;
+        n = 5;
+        int[][] computers = {{1,0, 0,1, 0}, {0,1, 0,1, 0}, {0,0, 1,0, 1}, {1,1, 0,1, 0}, {0,0, 1,0, 1}};
 //        int[][] computers = {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
-        int[][] computers = {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}};
+//        int[][] computers = {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}};
 
-        int answer =0;
+        int answer = 0;
         nodes = new int[n];
-        for(int i=0;i<n;i++){
-            nodes[i]=i;
+        for (int i = 0; i < n; i++) {
+            nodes[i] = i;
         }
-//        for(int i =0;i<n;i++){
-//            union(n,computers,nodes,i);
+
+//        List<Integer> [] adj = new ArrayList[n];
+//        for(int i=0;i<n;i++){
+//            adj[i]=new ArrayList<>();
+//            for(int j=0;j<n;j++){
+//                if(i!=j && computers[i][j]==1){
+//                    adj[i].add(j);
+//                }
+//            }
 //        }
+        System.out.println("start");
+
+        Arrays.stream(nodes).forEach(x -> System.out.printf(x + " "));
+        System.out.println();
+
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 if(i!=j && computers[i][j]==1){
-                    union(i,j);
+                    union(i,j,computers);
                 }
             }
         }
 
-//        Arrays.stream(nodes).forEach(x -> System.out.printf(x+" "));
-//        System.out.println();
         Set<Integer> set = new HashSet<>();
         for(int i : nodes){
             if(!set.contains(i)){
@@ -41,14 +53,24 @@ public class Network {
                 set.add(i);
             }
         }
+
+        System.out.println("end");
+        Arrays.stream(nodes).forEach(x -> System.out.printf(x + " "));
+        System.out.println();
+
         System.out.println(answer);
     }
-    private static void union(int a, int b){
-        a = find(a);
-        b = find(b);
+    private static void union(int a, int b, int[][] computers){
+
+        a = find(a); // a의 대표값
+        b = find(b); // b의 대표값
 
         if(a!=b){
-            nodes[b]=a;
+            if(a<b){
+                nodes[b]=a;
+            }else{
+                nodes[a]=b;
+            }
         }
 
     }
@@ -59,21 +81,29 @@ public class Network {
         return nodes[a]=find(nodes[a]);
     }
 
-}
-//    private static void union(int n, int[][] computers,int[] nodes,int pNode){
-//        Queue<Integer> queue = new LinkedList<>();
-//        for(int i=0;i< n;i++){
-//            if(computers[pNode][i]==1 && i!=pNode){
-//                queue.add(i);
+
+//    private static void dfs(List<Integer>[] adj, int node,int[][] computers){
+//        for(int c : adj[node]){
+//            Arrays.stream(nodes).forEach(x -> System.out.printf(x + " "));
+//            System.out.println();
+//            if(nodes[c]==node){
+//                continue;
+//            }
+//            if(computers[node][c]==1){
+//                nodes[c]=node;
+//                dfs(adj,nodes[c],computers);
+//
 //            }
 //        }
-//        while(!queue.isEmpty()){
-//            int node = queue.poll();
-//            if(pNode == nodes[pNode]){
-//                nodes[node]=pNode;
-//                return pNode;
-//            }
-//            nodes[node]=union(n,computers,nodes,nodes[pNode]);
-//        }
-//        return nodes[pNode];
 //    }
+}
+
+
+
+//    Set<Integer> set = new HashSet<>();
+//        for(int i : nodes){
+//                if(!set.contains(i)){
+//                answer++;
+//                set.add(i);
+//                }
+//        }
