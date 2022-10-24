@@ -14,64 +14,41 @@ public class Network {
 //        System.out.println(str);
 
         n = 5;
-        int[][] computers = {{1,0, 0,1, 0}, {0,1, 0,1, 0}, {0,0, 1,0, 1}, {1,1, 0,1, 0}, {0,0, 1,0, 1}};
+        int[][] computers = {{1,0, 1,1, 0}, {0,1, 0,1, 0}, {1,0, 1,0, 1}, {1,1, 0,1, 0}, {0,0, 1,0, 1}};
 //        int[][] computers = {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
 //        int[][] computers = {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}};
 
         int answer = 0;
+
         nodes = new int[n];
-        for (int i = 0; i < n; i++) {
-            nodes[i] = i;
+        for(int i=0;i<n;i++){
+            nodes[i]=i;
         }
-
-//        List<Integer> [] adj = new ArrayList[n];
-//        for(int i=0;i<n;i++){
-//            adj[i]=new ArrayList<>();
-//            for(int j=0;j<n;j++){
-//                if(i!=j && computers[i][j]==1){
-//                    adj[i].add(j);
-//                }
-//            }
-//        }
-        System.out.println("start");
-
-        Arrays.stream(nodes).forEach(x -> System.out.printf(x + " "));
-        System.out.println();
-
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 if(i!=j && computers[i][j]==1){
-                    union(i,j,computers);
+                    union(i,j);
+                    computers[j][i]=0;
                 }
             }
         }
 
         Set<Integer> set = new HashSet<>();
-        for(int i : nodes){
-            if(!set.contains(i)){
+        for(int i=0;i<n;i++){
+            int node = find(i);
+            if(!set.contains(node)){
                 answer++;
-                set.add(i);
+                set.add(node);
             }
         }
-
-        System.out.println("end");
-        Arrays.stream(nodes).forEach(x -> System.out.printf(x + " "));
-        System.out.println();
 
         System.out.println(answer);
     }
-    private static void union(int a, int b, int[][] computers){
+    private static void union(int a, int b){
+        a = find(a);
+        b = find(b);
 
-        a = find(a); // a의 대표값
-        b = find(b); // b의 대표값
-
-        if(a!=b){
-            if(a<b){
-                nodes[b]=a;
-            }else{
-                nodes[a]=b;
-            }
-        }
+        nodes[a]=nodes[b]=a<=b ? a : b;
 
     }
     private static int find(int a){
@@ -81,29 +58,4 @@ public class Network {
         return nodes[a]=find(nodes[a]);
     }
 
-
-//    private static void dfs(List<Integer>[] adj, int node,int[][] computers){
-//        for(int c : adj[node]){
-//            Arrays.stream(nodes).forEach(x -> System.out.printf(x + " "));
-//            System.out.println();
-//            if(nodes[c]==node){
-//                continue;
-//            }
-//            if(computers[node][c]==1){
-//                nodes[c]=node;
-//                dfs(adj,nodes[c],computers);
-//
-//            }
-//        }
-//    }
 }
-
-
-
-//    Set<Integer> set = new HashSet<>();
-//        for(int i : nodes){
-//                if(!set.contains(i)){
-//                answer++;
-//                set.add(i);
-//                }
-//        }
