@@ -22,21 +22,21 @@ public class Fatigue {
 
     private static int dfs(int k, int[][]dungeons, int i,int cnt){
         if(i==dungeons.length){
+            System.out.println(String.format("cnt : %d,  k : %d", cnt,k));
             return cnt;
         }
+        int tmpK = k;
 
-        int noUse = dfs(k,dungeons,i+1,cnt);
-        cnt=explore(k,dungeons[i],cnt);
-        int use = dfs(k,dungeons,i+1,cnt);
-        cnt= Math.max(use,noUse);
-       return cnt;
-    }
-
-    private static int explore(int k, int[] dungeon, int cnt){
+        int[] dungeon=dungeons[i];
+        int tmpCnt = cnt;
         if(dungeon[0]<=k){
-            cnt++;
             k-=dungeon[1];
+            System.out.println(String.format("cnt : %d, dungeon : %d %d k : %d", cnt,dungeon[0],dungeon[1],k));
+            tmpCnt=dfs(k,dungeons,i+1,cnt+1);
         }
-        return cnt;
+
+       return Math.max(tmpCnt,dfs(tmpK,dungeons,i+1,cnt));
     }
+
+
 }
