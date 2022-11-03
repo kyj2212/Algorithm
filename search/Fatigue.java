@@ -1,6 +1,8 @@
 package search;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Fatigue {
@@ -15,66 +17,90 @@ public class Fatigue {
 
         // 최소 필요 피로도
         // 소모 피로도
-        boolean[] visited = new boolean[dungeons.length];
-//        int answer =dfs(k,dungeons,0,0);
-        int answer = bfs(k,dungeons);
+        int answer=-1;
+        boolean[][] visited = new boolean[dungeons.length][dungeons.length];
+
+//        List<int[]> dunList= new ArrayList<>();
+        Queue<int[]> queue = new LinkedList<>();
+        for(int i =0;i< dungeons.length;i++){
+//            dunList.add(dungeons[i]);
+            queue.add(new int[]{k,0,0,dungeons[i][0],dungeons[i][1]});
+        }
+        answer =sol(dungeons.length,dungeons,queue,visited);
+
         System.out.println(answer);
     }
 
-    private static int bfs(int k , int[][] dungeons){
-        // 초기화
+
+    private static int sol(int len, int[][] dungeons, Queue<int[]> queue, boolean[][] visited){
         int cnt =0;
-        int[][] visited = new int[dungeons.length][dungeons.length];
-        Queue<int[]> queue = new LinkedList<>();
-        for(int i =0;i<dungeons.length;i++){
-            queue.add(new int[]{k,cnt,i});
-        }
         while(!queue.isEmpty()){
 
-            int[] node = queue.poll();
-            cnt=node[1];
-            visited[cnt][node[2]]=1;
-            int[] tmp = explore(dungeons,node);
-            if(tmp[1]==dungeons.length){
-                return tmp[1];
+            int[] node=queue.poll();
+            int k = node[0];
+            int num = node[1];
+            cnt = node[2];
+            int[] dungeon= new int[]{node[3],node[4]};
+
+
+            if(cnt==len){
+                System.out.println(String.format("cnt : %d,  k : %d", cnt,k));
+                return cnt;
             }
-            for(int i =0;i<dungeons.length;i++){ // visited[0]=0, visited[4]=1 이야 4번노드는 1이지만 3번노드가 들린게 아니야, 근데 자기와 같은 depth 인데 visited 이면 앞의 큐에서 계산햇을거야
-                if(visited[tmp[1]][i]==1){
+
+            for(int j=0;j<len;j++){
+                if(visited[cnt][j]){
                     continue;
                 }
-                queue.add(new int[]{tmp[0],tmp[1],i});
+                queue.add(new int[]{k,j,cnt,dungeons[j][0],dungeons[j][1]});
+            }
+
+            if(dungeon[0]<=k){
+                k-=dungeon[1];
+                System.out.println(String.format("cnt : %d, dungeon : %d %d k : %d", cnt,dungeon[0],dungeon[1],k));
+
+                visited[cnt][num]=true;
+
+                for(int j=0;j<len;j++){
+                    if(visited[cnt][j]){
+                        continue;
+                    }
+                    queue.add(new int[]{k,j,cnt+1,dungeons[j][0],dungeons[j][1]});
+                }
             }
         }
         return cnt;
     }
-    private static int[] explore(int[][] dungeons,int[] node){
-        int k=node[0];
-        int cnt=node[1];
-        int[] dungeon = dungeons[node[2]];
-        if(dungeon[0]<=k){
-            k-=dungeon[1];
-            cnt++;
+
+/*    private static int dfs(int k, int len, int[][] dungeons, Queue<int[]> queue, int cnt,boolean[][] visited){
+        if(cnt==len){
+            return cnt;
         }
-        return new int[]{k,cnt};
-    }
-/*
-    private static int dfs(int k, int[][]dungeons, int i,int cnt){
-        if(i==dungeons.length){
+        if(queue.isEmpty()){
             System.out.println(String.format("cnt : %d,  k : %d", cnt,k));
             return cnt;
         }
         int tmpK = k;
 
-        int[] dungeon=dungeons[i];
-        int tmpCnt = cnt;
+        int[] node=queue.poll();
+        int num = node[0];
+        int[] dungeon= new int[]{node[1],node[2]};
+        visited[cnt][num]=true;
+        int tmpCnt = dfs(tmpK,len,dungeons,queue,cnt,visited);
         if(dungeon[0]<=k){
             k-=dungeon[1];
             System.out.println(String.format("cnt : %d, dungeon : %d %d k : %d", cnt,dungeon[0],dungeon[1],k));
-            tmpCnt=dfs(k,dungeons,i+1,cnt+1);
+
+            tmpCnt=Math.max(tmpCnt,dfs(k,len,dungeons,queue,cnt+1,visited));
+
         }
-
-       return Math.max(tmpCnt,dfs(tmpK,dungeons,i+1,cnt));
+        for(int j=0;j<len;j++){
+            if(visited[cnt][j]){
+                continue;
+            }
+            queue.add(new int[]{cnt,dungeons[j][0],dungeons[j][1]});
+        }
+        return tmpCnt;
     }*/
-
 
 }
