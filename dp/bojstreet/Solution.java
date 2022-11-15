@@ -26,31 +26,32 @@ public class Solution {
 		for(int i =0;i<N;i++) {
 			dp[i]=1000000;
 		}
-		Queue<Integer> queue = new LinkedList<>();
+		
 		dp[0]=0;
-		queue.add(0);
-		while(!queue.isEmpty()) {
-			
-			int prev = queue.poll();
-			int cnt =0;
-			for(int i =prev+1;i<N;i++) {
-				
-				if(blocks[i]!=next(blocks[prev])) {
-					cnt++;
+		
 
+		int [] prevs = new int[N];
+		prevs[0]=1;
+		for(int p=0;p<N;p++) {
+			if(prevs[p]!=1) {
+				continue;
+			}
+			for(int i =p+1;i<N;i++) {
+				
+				if(blocks[i]!=next(blocks[p])) {	
 					continue;
 				}
-//				System.out.println("prev : "+prev +" next : "+i);
-				dp[i]=Math.min(dp[i], dp[prev]+(i-prev)*(i-prev));
-				if(!queue.contains(i)) {
-					queue.add(i);
-				}
-				
+//				System.out.println("prev : "+p +" next : "+i);
+				dp[i]=Math.min(dp[i], dp[p]+(i-p)*(i-p));
+				prevs[i]=1;
 			}
-
-//			Arrays.stream(dp).forEach(i-> System.out.printf(i+ " "));
-//			System.out.println();
+			
+//				Arrays.stream(dp).forEach(i-> System.out.printf(i+ " "));
+//				System.out.println();
+				
 		}
+
+
 		System.out.println(dp[N-1]==1000000 ? -1 : dp[N-1]);
 //		System.out.println(dp[N-1]);
 		
