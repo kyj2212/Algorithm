@@ -23,48 +23,58 @@ public class Solution {
 		for(int i =0;i<N;i++) {
 			V[i]=Integer.parseInt(st.nextToken());
 		}
+		int [][] dp = new int[N][M+1];
+		System.out.println(play(dp,V));
 
-		int[][] dp = new int[N+1][M+1];
-		
-		dp[0][S]=1;
-		for(int i =0;i<N;i++) {
-//			for(int n=M;n>=0;n--) {
-//				System.out.printf(dp[i][n] +" ");
-//			}
-//			System.out.println();
+	}
+
+	private static int play(int[][] dp, int[] V) {
+		if(S-V[0]>=0) {
+			dp[0][S-V[0]]=1;
+		}
+		if(S+V[0]<=M) {
+			dp[0][S+V[0]]=1;
+		}
+		if(S-V[0]<0 && S+V[0]>M) {
+//			System.out.println("P:"+ P+" V :"+V[0]+" ");
+			return -1;
+		}
+		for(int n=1;n<N;n++) {
 			int cnt =0;
-			for(int j =0;j<=M;j++) {
-				if(dp[i][j]==0 || dp[i][j]== -1) {
+			for(int m=0;m<=M;m++) {
+				if(dp[n-1][m]!=n) {
 					cnt++;
 					continue;
 				}
-//				System.out.println("j : " + j + " V[i] : "+ V[i]);
-				if(j-V[i]>=0) {
-					dp[i+1][j-V[i]]=1;
+				if(m-V[n]>=0) {
+					dp[n][m-V[n]]=n+1;
 				}
-				if(j+V[i]<=M) {
-					dp[i+1][j+V[i]]=1;
+				if(m+V[n]<=M) {
+					dp[n][m+V[n]]=n+1;
 				}
-				if(j-V[i]<0 && j+V[i]>M) {
-					dp[i+1][j]=-1;
+				if(m-V[n]<0 && m+V[n]>M) {
+//					System.out.println("P:"+ P+" V :"+V[n]+" ");
+					dp[n][m]=-1;
 				}
 			}
-			if(cnt==M+1) {
-				System.out.println(-1);
-				return;
+			if(cnt>M) {
+				return -1;
 			}
-//			for(int n=M;n>=0;n--) {
-//				System.out.printf(dp[i+1][n] +" ");
+//			System.out.println("V="+V[n]+" ");
+//			for(int i =0;i<N;i++) {
+//				for(int j=0;j<=M;j++) {
+//					System.out.printf(dp[i][j]+" ");
+//				}
+//				System.out.println();
 //			}
 //			System.out.println();
 		}
-		for(int i=M;i>=0;i--) {
-			
-			if(dp[N][i]!=0) {
-				System.out.println(i);
-				break;
+		
+		for(int j=M;j>=0;j--) {
+			if(dp[N-1][j]==N) {
+				return j;
 			}
 		}
+		return -1;
 	}
-
 }
