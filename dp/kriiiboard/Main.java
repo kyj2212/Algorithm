@@ -24,33 +24,26 @@ public class Main {
 	
 	public static long printA() {
 		long [] dp = new long[N];
-		long [] buf = new long[N];
-		if(N<=3) {
+		if(N<=6) {
 			return N;
 		}
 
 		dp[0]=1;
 		dp[1]=2;
 		dp[2]=3;
-		for(int i =3;i<N;i++) {
-			if(dp[i-1]+1>dp[i]) {
-				dp[i]=dp[i-1]+1;
-				buf[i]=buf[i-1];
+		dp[3]=4;
+		dp[4]=5;
+		dp[5]=6;
+		for(int i =0;i<N-3;i++) {// N==17, N-3==14, i==13
+			for(int j =0;j<i;j++) { // j==12까지, j==11 일때, dp[16] , dp[11] + dp[11] *(13-11+1) = dp[11] + dp[11] *(3) = 36*4 = 144
+				dp[i+3]=Math.max(dp[i+3], dp[j]+dp[j]*(i-j+1));
 			}
-			if(dp[i-1]+buf[i-1]>=dp[i]) {
-				dp[i]=dp[i-1]+buf[i-1];
-				buf[i]=buf[i-1];
-			}
-			if(dp[i-3]*2 >= dp[i]) {
-				dp[i]=dp[i-3]*2;
-				buf[i]=dp[i-3];
-			}
+			
 		}
 
 //		Arrays.stream(dp).forEach(i -> System.out.printf(i+" "));
-//		System.out.println();
-//		Arrays.stream(buf).forEach(i -> System.out.printf(i+" "));
-//		System.out.println();
+	//	System.out.println();
+
 		return dp[N-1];
 	}
 
