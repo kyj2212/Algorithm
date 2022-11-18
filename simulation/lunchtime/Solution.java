@@ -42,7 +42,6 @@ public class Solution {
 						sl[1]=new int[] {i,j,map[i][j]};
 					}
 				}
-				
 			}
 
 			int[][] p = new int[pl.size()][2];
