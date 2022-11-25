@@ -1,0 +1,46 @@
+package search.dfs;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Virus {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int E = Integer.parseInt(br.readLine());
+        ArrayList<Integer> [] adj = new ArrayList[N+1];
+        for (int i = 1; i < N+1; i++) {
+            adj[i]=new ArrayList<>();
+        }
+        for (int i = 0; i < E; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine()," ");
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            adj[a].add(b);
+            adj[b].add(a);
+        }
+        boolean [] visited = new boolean[N+1];
+        dfs(1,adj,visited);
+        int cnt =0;
+        for(int i =2;i<N+1;i++){
+            if(visited[i]){
+                cnt++;
+            }
+        }
+
+        System.out.println(cnt);
+    }
+    public static void dfs(int i ,ArrayList<Integer>[] adj, boolean[] visited){
+        int size = adj[i].size();
+        for(int x : adj[i]){
+            if(visited[x]){
+                continue;
+            }
+            visited[x]=true;
+            dfs(x,adj,visited);
+        }
+    }
+}
