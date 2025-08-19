@@ -22,7 +22,7 @@ public class Friends4Blocks {
             char[] chars = board[i].toCharArray();  // 한글자씩 나눠
             for(int j =0;j<n;j++){
                 charB[i][j] = chars[j];
-                delB[i][j] = false;
+               // delB[i][j] = false;
             }
         }
         print(charB);
@@ -31,13 +31,16 @@ public class Friends4Blocks {
         int fCnt = 1;
         int dCnt = 0;
         while ( fCnt > 0){
+            delB = new boolean[m][n]; // 초기화
+
             // 삭제할 블록 찾기
             fCnt = find();
             System.out.println("fint cnt :: " + fCnt);
             //print(delB);
 
             // 블록 삭제
-            dCnt +=  del();
+            //dCnt +=  del();
+            dCnt += del_gpt();
             System.out.println("del cnt :: " + dCnt);
            // print(charB);
         }
@@ -59,6 +62,37 @@ public class Friends4Blocks {
         for(int i=0;i<arr.length;i++){
             System.out.println(arr[i]);
         }
+    }
+
+    public int del_gpt(){
+        int m = charB.length;
+        int n = charB[0].length;
+        int cnt = 0;
+        for(int i =0;i<charB.length;i++){
+            for(int j=0;j<charB[0].length;j++){
+                if(delB[i][j] && charB[i][j] != '0'){
+                    charB[i][j] = '0';
+                    cnt++;
+                }
+            }
+        }
+        System.out.println("삭제하고 나서");
+        print(charB);
+
+        // 내리기 시작
+        for (int j = 0; j < n; j++) {
+            int empty = m - 1; // 맨아래 부터
+            for (int i = m - 1; i >= 0; i--) { // 맨아래부터 시작
+                if (charB[i][j] != '0') { // 비어있지 않으면
+                    charB[empty][j] = charB[i][j]; // 가장 가까운 아래 빈블럭으로 이동
+                    if (empty != i) charB[i][j] = '0'; // 자기자신이 아니면 빈블럭이 됨
+                    empty--; // 빈블럭이 채워졌으니 한칸 줄어듬
+                }
+            }
+        }
+        System.out.println("내리고 나서");
+        print(charB);
+        return cnt;
     }
     public int del(){
         int cnt = 0;
