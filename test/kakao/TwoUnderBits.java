@@ -5,7 +5,7 @@ public class TwoUnderBits {
     public static void main(String[] args) {
         TwoUnderBits f = new TwoUnderBits();
 
-        long[] numbers = {2,7};
+        long[] numbers = {2, 7, 11, 123456789L};
         f.solution(numbers);
     }
 
@@ -17,80 +17,41 @@ public class TwoUnderBits {
         for(int i =0; i<len ;i++){
             long n = numbers[i];
             System.out.println("n :: getbit 시작 " + n );
-            //boolean[] bit = getBits(n);
-            String bit = Long.toBinaryString(n);
-            System.out.println("bit :: " + bit);
-            answer[i] = fx(bit, n);
+
+            long r =gpt_fx(n);
+            answer[i] = r;
             System.out.println("n :: " + n + " answer :: " + answer[i]);
         }
 
     }
 
-    public long fx(String bit, long n){
-        int cnt =3;
-        while(cnt>2){
-            //boolean[] tmp = getBits(++n);
-            System.out.println("왜 여기를 안들어오지 ?? ");
-            String tmp = Long.toBinaryString(++n);
-            System.out.println("tmp :: " + tmp);
-            cnt = comp(bit, tmp);
-            System.out.println("n 과 비교 :: " + cnt);
-            if(cnt <=2){
-                System.out.println("cnt <=2야 ??  "+cnt);
-                return n;
-            }
+    public long gpt_fx(long n){
+        long r;
+        if( (n&1) == 0) { // 짝수
+          System.out.println("짝수 n" + n);
+          r=n+1L;
+        }else{ // 홀수인 경우
+            long bit = 1L;
+            int idx = 0;
 
+            while((n&bit) != 0){ // 0010 이랑 & 해서 n 이 0 이여야 0 이니 0 나올때까지
+                bit<<=1; // 한개올리고
+                idx++;
+                // 0111 7
+                // 0010 >> bit
+                // 0111
+            }
+            // bit 의 위치에 0 이 있는것임
+            // 가장 작으려면 그 0 을 1로 바꾸로 바로 오른쪽을 바꿔야해 ( 나머지는 다 1이니까 가장 큰 1을 0으로 바꿔야지)
+            System.out.println("idx :: " + idx);
+            r = n^(bit); // 0있는 위치에 1로 바꾸고
+            System.out.println("0 을 1로 바꾸고 " + r);
+            r= r^(1L<<(idx-1)); // 바로 오른쪽 1을 0으로 바꾸고
+            System.out.println("오른쪽 1 을 0으로 바꾸고" + r);
+            return r;
 
-            System.out.println("cnt > 2 이면 while 돌아야하는데?" + cnt);
         }
-        return n;
-    }
-
-    public int comp(String s1 , String s2){
-        int cnt = 0;
-        int l1 = s1.length();
-        int l2 = s2.length();
-        if(l2>l1){
-            for(int i =0;i<l2-l1;i++){
-                s1= "0"+s1;
-            }
-        }
-        System.out.println("s1 :: " + s1);
-        System.out.println("s2 :: " + s2);
-        for(int i =0; i<l2;i++){
-            if(s1.charAt(i) != s2.charAt(i)){
-                cnt++;
-            }
-        }
-        return cnt;
-    }
-    public int comp2(boolean[] b1 , boolean[] b2){
-        int cnt = 0;
-        for(int i =0; i<64;i++){
-            if(b1[i] != b2[i]){
-                cnt++;
-            }
-        }
-        return cnt;
-    }
-    public boolean[] getBits(long n){
-        System.out.println("getbit n :: " + n);
-        boolean[] b = new boolean[64];
-        for(int i =0;i<n/2;i++){
-            System.out.println("n%2 :: " + (n%2));
-            b[i] = (n%2 != 0);
-            System.out.println("n/2 :: " + (n/2));
-            n=n/2;
-        }
-        print(b);
-        return b;
+        return r;
     }
 
-    public void print(boolean[] arr){
-        StringBuffer buf = new StringBuffer();
-        for(int i=0;i<arr.length;i++){
-            buf.append(arr[i] ? 1 : 0);
-        }
-        System.out.println(buf.toString() );
-    }
 }
